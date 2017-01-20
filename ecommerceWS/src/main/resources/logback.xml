@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<configuration scan="true" scanPeriod="2 hours">
+  	<appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>C:/Projects/apache-tomcat-8.0.28/logs/ecommerceWS.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+		    <!-- daily rollover -->
+			<FileNamePattern>C:/Projects/apache-tomcat-8.0.28/logs/ecommerceWS.%d{yyyy-MM-dd}.log</FileNamePattern>
+			
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>30</maxHistory>			
+		</rollingPolicy>
+ 
+		<encoder>
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%X{requestTrackId}] [%level] [%thread] [%C] [%M] [Line-%L] - %msg %n</Pattern>
+		</encoder> 	    
+  	</appender>
+ 
+   	<appender name="dailyRollingFileAppender-perf" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>C:/Projects/apache-tomcat-8.0.28/logs/ecommerceWS-perf.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+		    <!-- daily rollover -->
+			<FileNamePattern>C:/Projects/apache-tomcat-8.0.28/logs/ecommerceWS-perf.%d{yyyy-MM-dd}.log</FileNamePattern>
+			
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>30</maxHistory>			
+		</rollingPolicy>
+ 
+		<encoder>
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%X{requestTrackId}] [%level] [%thread] - %msg %n</Pattern>
+		</encoder> 	    
+  	</appender>
+  	
+	<!-- Application Loggers -->
+	<logger name="ecommerce-perf" additivity="false">
+	    <level value="INFO" />
+		<appender-ref ref="dailyRollingFileAppender-perf"/>
+	</logger>
+	
+	<!-- 3rdparty Loggers -->
+	<logger name="org.springframework">
+		<level value="DEBUG" />
+	</logger>
+
+	<logger name="org.hibernate">
+		<level value="DEBUG" />
+	</logger>
+
+	<logger name="org.apache">
+		<level value="DEBUG" />
+	</logger>
+	
+	<logger name="com.wordnik">
+		<level value="ERROR" />
+	</logger>
+	
+	<logger name="org.reflections">
+		<level value="ERROR" />
+	</logger>
+	
+	<logger name="com.mchange">
+		<level value="ERROR" />
+	</logger>
+
+	<!-- Root Logger -->
+ 	<root level="DEBUG">
+		<appender-ref ref="dailyRollingFileAppender" />
+	</root>
+
+</configuration> 
