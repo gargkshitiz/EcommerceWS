@@ -52,43 +52,43 @@ public class RestClientImpl implements RestClient {
 	@Override
 	public ResponseEntity<String> get(String resourcePath) throws RequestFailedException{
 		HttpEntity<String> httpEntity = new HttpEntity<String>(headers);
-		return call(serviceUrl, HttpMethod.GET, httpEntity, true);
+		return call(serviceUrl+resourcePath, HttpMethod.GET, httpEntity, true);
 	}
 
 	@Override
 	public ResponseEntity<String> delete(String resourcePath) throws RequestFailedException{
 		HttpEntity<String> httpEntity = new HttpEntity<String>(headers);
-		return call(serviceUrl, HttpMethod.DELETE, httpEntity, true);
+		return call(serviceUrl+resourcePath, HttpMethod.DELETE, httpEntity, true);
 	}
 	
 	@Override
 	public ResponseEntity<String> post(String resourcePath, String jsonRequestBody) throws RequestFailedException{
 		HttpEntity<String> httpEntity = new HttpEntity<String>(jsonRequestBody, headers);
-		return call(serviceUrl, HttpMethod.POST, httpEntity, true);
+		return call(serviceUrl+resourcePath, HttpMethod.POST, httpEntity, true);
 	}
 	
 	@Override
 	public ResponseEntity<String> post(String resourcePath, String jsonRequestBody, boolean shouldRetry) throws RequestFailedException{
 		HttpEntity<String> httpEntity = new HttpEntity<String>(jsonRequestBody, headers);
-		return call(serviceUrl, HttpMethod.POST, httpEntity, shouldRetry);
+		return call(serviceUrl+resourcePath, HttpMethod.POST, httpEntity, shouldRetry);
 	}
 	
 	@Override
 	public ResponseEntity<String> put(String resourcePath, String jsonRequestBody) throws RequestFailedException{
 		HttpEntity<String> httpEntity = new HttpEntity<String>(jsonRequestBody, headers);
-		return call(serviceUrl, HttpMethod.PUT, httpEntity, true);
+		return call(serviceUrl+resourcePath, HttpMethod.PUT, httpEntity, true);
 	}
 	
 	@Override
 	public ResponseEntity<String> getOnBulkApi(String resourcePath) throws RequestFailedException {
 		HttpEntity<String> httpEntity = new HttpEntity<String>(headers);
-		return call(serviceUrl, HttpMethod.GET, httpEntity, true);
+		return call(serviceUrl+resourcePath, HttpMethod.GET, httpEntity, true);
 	}
 	
 	@Override
 	public ResponseEntity<String> postOnBulkApi(String resourcePath, String jsonRequestBody) throws RequestFailedException {
 		HttpEntity<String> httpEntity = new HttpEntity<String>(jsonRequestBody, headers);
-		return call(serviceUrl, HttpMethod.POST, httpEntity, true);
+		return call(serviceUrl+resourcePath, HttpMethod.POST, httpEntity, true);
 	}
 	
 	@Override
