@@ -11,6 +11,7 @@ import com.rakuten.ecommerce.service.ProductService;
 import com.rakuten.ecommerce.service.exception.DataNotFoundException;
 import com.rakuten.ecommerce.service.exception.InvalidClientRequestException;
 import com.rakuten.ecommerce.web.entities.ProductDetails;
+import com.rakuten.ecommerce.web.entities.Products;
 /**
  * @author Kshitiz Garg
  */
@@ -30,6 +31,12 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public void persist(ProductDetails productDetails) throws InvalidClientRequestException{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void persist(Products products) {
 		// TODO Auto-generated method stub
 		
 	}

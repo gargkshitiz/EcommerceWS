@@ -1,5 +1,7 @@
 package com.rakuten.ecommerce.web.entities;
-
+/**
+ * @author Kshitiz Garg
+ */
 public class ProductDetails {
 
 	private String productDesc;

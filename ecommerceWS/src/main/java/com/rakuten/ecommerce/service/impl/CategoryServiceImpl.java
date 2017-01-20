@@ -10,6 +10,8 @@ import com.rakuten.ecommerce.dao.entities.Category;
 import com.rakuten.ecommerce.service.CategoryService;
 import com.rakuten.ecommerce.service.exception.DataNotFoundException;
 import com.rakuten.ecommerce.service.exception.InvalidClientRequestException;
+import com.rakuten.ecommerce.web.entities.Categories;
+import com.rakuten.ecommerce.web.entities.CategoryDetails;
 /**
  * @author Kshitiz Garg
  */
@@ -25,6 +27,18 @@ public class CategoryServiceImpl implements CategoryService {
 	public Category get(long categoryId) throws InvalidClientRequestException, DataNotFoundException {
 		logger.info("Fetching category by Id: {}", categoryId);
 		return categoryDao.getBy(categoryId);
+	}
+
+	@Override
+	public void persist(CategoryDetails categoryDetails) throws InvalidClientRequestException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void persist(Categories categories) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

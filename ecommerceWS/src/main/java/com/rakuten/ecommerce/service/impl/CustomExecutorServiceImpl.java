@@ -14,9 +14,7 @@ import org.springframework.stereotype.Service;
 import com.rakuten.ecommerce.service.CustomExecutorService;
 import com.rakuten.ecommerce.service.util.MdcThreadPoolExecutor;
 /**
- * 
- * @author kgarg
- *
+ * @author Kshitiz Garg
  */
 @Service
 public class CustomExecutorServiceImpl implements CustomExecutorService {

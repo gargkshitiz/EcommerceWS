@@ -14,29 +14,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.google.gson.Gson;
 import com.rakuten.ecommerce.service.ProductService;
 import com.rakuten.ecommerce.service.exception.InvalidClientRequestException;
-import com.rakuten.ecommerce.web.entities.ProductDetails;
+import com.rakuten.ecommerce.web.entities.Products;
 import com.rakuten.ecommerce.web.util.ApiDocumentation;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 /**
  * @author Kshitiz Garg
  */
-@Api(value = ApiDocumentation.PRODUCT, description = ApiDocumentation.PRODUCT_API_DESC)
-@Path(ApiDocumentation.PRODUCT_API)
-public class ProductResource {
+@Api(value = ApiDocumentation.PRODUCTS, description = ApiDocumentation.PRODUCTS_API_DESC)
+@Path(ApiDocumentation.PRODUCTS_API)
+public class ProductsResource {
  
-	private static final Logger logger = LoggerFactory.getLogger(ProductResource.class);
+	private static final Logger logger = LoggerFactory.getLogger(ProductsResource.class);
 
 	@Autowired
 	private ProductService productService;
 	
-	@ApiOperation(value =  ApiDocumentation.PRODUCT_POST , httpMethod = ApiDocumentation.POST, notes = ApiDocumentation.PRODUCT_POST_NOTES)
+	@ApiOperation(value =  ApiDocumentation.PRODUCTS_POST , httpMethod = ApiDocumentation.POST, notes = ApiDocumentation.PRODUCTS_POST_NOTES)
 	@POST
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Response save(ProductDetails productDetails){
+    public Response save(Products products){
 		try {
-			productService.persist(productDetails);
+			productService.persist(products);
 			return Response.ok().build();
 		}
 		catch (InvalidClientRequestException e) {
@@ -45,7 +45,7 @@ public class ProductResource {
 			return Response.status(e.getHttpStatusCode().value()).entity(new Gson().toJson(e.getMessage())).build();
 		} 
 		catch (Exception e) {
-			String msg = "Error persisting product : "+productDetails;
+			String msg = "Error persisting products : "+products;
 			logger.error(msg, e);
 			return Response.serverError().entity(new Gson().toJson(msg)).build();
 		}

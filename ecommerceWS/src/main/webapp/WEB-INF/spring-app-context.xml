@@ -19,7 +19,6 @@
 	<bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean" />
 	
 	<import resource="spring-cxf.xml" />
-	<import resource="spring-scheduled-jobs.xml" />
 	<import resource="spring-dao.xml" />
 	<import resource="spring-swagger.xml" />
 

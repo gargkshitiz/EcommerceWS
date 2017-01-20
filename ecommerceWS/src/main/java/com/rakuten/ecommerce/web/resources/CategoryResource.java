@@ -12,31 +12,31 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.gson.Gson;
-import com.rakuten.ecommerce.service.ProductService;
+import com.rakuten.ecommerce.service.CategoryService;
 import com.rakuten.ecommerce.service.exception.InvalidClientRequestException;
-import com.rakuten.ecommerce.web.entities.ProductDetails;
+import com.rakuten.ecommerce.web.entities.CategoryDetails;
 import com.rakuten.ecommerce.web.util.ApiDocumentation;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 /**
  * @author Kshitiz Garg
  */
-@Api(value = ApiDocumentation.PRODUCT, description = ApiDocumentation.PRODUCT_API_DESC)
-@Path(ApiDocumentation.PRODUCT_API)
-public class ProductResource {
+@Api(value = ApiDocumentation.CATEGORY, description = ApiDocumentation.CATEGORY_API_DESCRIPTION)
+@Path(ApiDocumentation.CATEGORY_API)
+public class CategoryResource {
  
-	private static final Logger logger = LoggerFactory.getLogger(ProductResource.class);
+	private static final Logger logger = LoggerFactory.getLogger(CategoryResource.class);
 
 	@Autowired
-	private ProductService productService;
+	private CategoryService categoryService;
 	
-	@ApiOperation(value =  ApiDocumentation.PRODUCT_POST , httpMethod = ApiDocumentation.POST, notes = ApiDocumentation.PRODUCT_POST_NOTES)
+	@ApiOperation(value =  ApiDocumentation.CATEGORY_POST , httpMethod = ApiDocumentation.POST, notes = ApiDocumentation.CATEGORY_POST_NOTES)
 	@POST
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Response save(ProductDetails productDetails){
+    public Response save(CategoryDetails categoryDetails){
 		try {
-			productService.persist(productDetails);
+			categoryService.persist(categoryDetails);
 			return Response.ok().build();
 		}
 		catch (InvalidClientRequestException e) {
@@ -45,7 +45,7 @@ public class ProductResource {
 			return Response.status(e.getHttpStatusCode().value()).entity(new Gson().toJson(e.getMessage())).build();
 		} 
 		catch (Exception e) {
-			String msg = "Error persisting product : "+productDetails;
+			String msg = "Error persisting CATEGORY : "+categoryDetails;
 			logger.error(msg, e);
 			return Response.serverError().entity(new Gson().toJson(msg)).build();
 		}
