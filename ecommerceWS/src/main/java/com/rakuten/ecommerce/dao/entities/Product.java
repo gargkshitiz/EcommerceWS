@@ -42,11 +42,14 @@ public class Product {
 	private String productCurrency;
 	
 	@Access(AccessType.FIELD)
-	@Column(name = "PriceVal", nullable = false)
-	private String priceVal;
+	@Column(name = "Price", nullable = false)
+	private String price;
 	
 	@Transient
-	private transient BigDecimal priceValInDesiredCurrency;
+	private transient BigDecimal priceInDesiredCurrency;
+	
+	@Transient
+	private transient BigDecimal priceInEuro;
 	
 	public long getProductId() {
 		return productId;
@@ -72,20 +75,29 @@ public class Product {
 		this.productCurrency = productCurrency;
 	}
 
-	public String getPriceVal() {
-		return priceVal;
+	public String getPrice() {
+		return price;
 	}
 
-	public void setPriceVal(String priceVal) {
-		this.priceVal = priceVal;
+	public void setPrice(String price) {
+		this.price = price;
 	}
 
-	public BigDecimal getPriceValInDesiredCurrency() {
-		return priceValInDesiredCurrency;
+	public BigDecimal getPriceInDesiredCurrency() {
+		return priceInDesiredCurrency;
 	}
 
-	public void setPriceValInDesiredCurrency(BigDecimal priceValInDesiredCurrency) {
-		this.priceValInDesiredCurrency = priceValInDesiredCurrency;
+	public void setPriceInDesiredCurrency(BigDecimal priceInDesiredCurrency) {
+		this.priceInDesiredCurrency = priceInDesiredCurrency;
 	}
+
+	public BigDecimal getPriceInEuro() {
+		return priceInEuro;
+	}
+
+	public void setPriceInEuro(BigDecimal priceInEuro) {
+		this.priceInEuro = priceInEuro;
+	}
+
 
 }

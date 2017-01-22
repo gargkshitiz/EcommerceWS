@@ -44,25 +44,26 @@ public class ProductServiceImpl implements ProductService {
 		String productCurrency = product.getProductCurrency();
 		StringBuilder fixerUrl = new StringBuilder(restClient.getFixerBaseUri()+RestClient.SYMBOLS_Q_PARAM);
 		fixerUrl.append(productCurrency);
-		boolean desiredCurrencyOtherThanEuro = !StringUtils.isEmpty(desiredCurrency);
-		if(desiredCurrencyOtherThanEuro){
+		boolean desiredCurrencyIsEuro = StringUtils.isEmpty(desiredCurrency) || "EUR".equalsIgnoreCase(desiredCurrency);
+		if(!desiredCurrencyIsEuro){
 			fixerUrl.append(",").append(desiredCurrency);
 		}
 		ResponseEntity<String> responseEntity = restClient.get(fixerUrl.toString());
 		Map<Object, Object> exchangeRates = (Map<Object, Object>)new Gson().fromJson(responseEntity.getBody(), Map.class).get(RestClient.RATES);
 		BigDecimal productCurrencyExchangeRate =  BigDecimal.valueOf((double)exchangeRates.get(productCurrency));
-		BigDecimal priceValInDesiredCurrency = new BigDecimal(product.getPriceVal()).divide(productCurrencyExchangeRate, 2, RoundingMode.HALF_UP);
-		if(desiredCurrencyOtherThanEuro){
+		BigDecimal priceValInDesiredCurrency = new BigDecimal(product.getPrice()).divide(productCurrencyExchangeRate, 2, RoundingMode.HALF_UP);
+		product.setPriceInEuro(priceValInDesiredCurrency);
+		if(!desiredCurrencyIsEuro){
 			BigDecimal desiredCurrencyExchangeRate =  BigDecimal.valueOf((double)exchangeRates.get(desiredCurrency));
 			priceValInDesiredCurrency = priceValInDesiredCurrency.multiply(desiredCurrencyExchangeRate, MathContext.DECIMAL64).setScale(2, RoundingMode.CEILING);
 		}
-		product.setPriceValInDesiredCurrency(priceValInDesiredCurrency);
+		product.setPriceInDesiredCurrency(priceValInDesiredCurrency);
 		return product;
 	}
 
 	private Product dummyProduct() {
 		Product p = new Product();
-		p.setPriceVal("100");
+		p.setPrice("100");
 		p.setProductCurrency("INR");
 		p.setProductId(10);
 		p.setProductDesc("First product");
