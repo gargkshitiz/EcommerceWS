@@ -22,7 +22,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.rakuten.ecommerce.service.RestClient;
-import com.rakuten.ecommerce.service.exception.RestRequestFailedException;
+import com.rakuten.ecommerce.service.exception.ThirdPartyRequestFailedException;
 /**
  * @author Kshitiz Garg
  */
@@ -35,9 +35,6 @@ public class RestClientImpl implements RestClient {
 	private RestTemplate restTemplate;
 	
 	private HttpHeaders headers;
-
-	@Value("${fixer-base-uri}")
-	private String fixerBaseUri;
 	
 	@Value("${interval-between-retrials-in-secs}")
 	private long retryIntervalInSecs;
@@ -50,49 +47,49 @@ public class RestClientImpl implements RestClient {
 	}
 
 	@Override
-	public ResponseEntity<String> get(String resourcePath) throws RestRequestFailedException{
+	public ResponseEntity<String> get(String resourcePath) throws ThirdPartyRequestFailedException{
 		HttpEntity<String> httpEntity = new HttpEntity<String>(headers);
 		return call(resourcePath, HttpMethod.GET, httpEntity, true);
 	}
 
 	@Override
-	public ResponseEntity<String> delete(String resourcePath) throws RestRequestFailedException{
+	public ResponseEntity<String> delete(String resourcePath) throws ThirdPartyRequestFailedException{
 		HttpEntity<String> httpEntity = new HttpEntity<String>(headers);
 		return call(resourcePath, HttpMethod.DELETE, httpEntity, true);
 	}
 	
 	@Override
-	public ResponseEntity<String> post(String resourcePath, String jsonRequestBody) throws RestRequestFailedException{
+	public ResponseEntity<String> post(String resourcePath, String jsonRequestBody) throws ThirdPartyRequestFailedException{
 		HttpEntity<String> httpEntity = new HttpEntity<String>(jsonRequestBody, headers);
 		return call(resourcePath, HttpMethod.POST, httpEntity, true);
 	}
 	
 	@Override
-	public ResponseEntity<String> post(String resourcePath, String jsonRequestBody, boolean shouldRetry) throws RestRequestFailedException{
+	public ResponseEntity<String> post(String resourcePath, String jsonRequestBody, boolean shouldRetry) throws ThirdPartyRequestFailedException{
 		HttpEntity<String> httpEntity = new HttpEntity<String>(jsonRequestBody, headers);
 		return call(resourcePath, HttpMethod.POST, httpEntity, shouldRetry);
 	}
 	
 	@Override
-	public ResponseEntity<String> put(String resourcePath, String jsonRequestBody) throws RestRequestFailedException{
+	public ResponseEntity<String> put(String resourcePath, String jsonRequestBody) throws ThirdPartyRequestFailedException{
 		HttpEntity<String> httpEntity = new HttpEntity<String>(jsonRequestBody, headers);
 		return call(resourcePath, HttpMethod.PUT, httpEntity, true);
 	}
 	
 	@Override
-	public ResponseEntity<String> getOnBulkApi(String resourcePath) throws RestRequestFailedException {
+	public ResponseEntity<String> getOnBulkApi(String resourcePath) throws ThirdPartyRequestFailedException {
 		HttpEntity<String> httpEntity = new HttpEntity<String>(headers);
 		return call(resourcePath, HttpMethod.GET, httpEntity, true);
 	}
 	
 	@Override
-	public ResponseEntity<String> postOnBulkApi(String resourcePath, String jsonRequestBody) throws RestRequestFailedException {
+	public ResponseEntity<String> postOnBulkApi(String resourcePath, String jsonRequestBody) throws ThirdPartyRequestFailedException {
 		HttpEntity<String> httpEntity = new HttpEntity<String>(jsonRequestBody, headers);
 		return call(resourcePath, HttpMethod.POST, httpEntity, true);
 	}
 	
 	@Override
-	public ResponseEntity<String> post(String postUrl, String requestBody, String contentType, String charSet) throws RestRequestFailedException {
+	public ResponseEntity<String> post(String postUrl, String requestBody, String contentType, String charSet) throws ThirdPartyRequestFailedException {
 		HttpHeaders customHeaders = new HttpHeaders();
 		List<Charset> acceptableCharsets = new ArrayList<Charset>();
 	    acceptableCharsets.add(Charset.forName(charSet));
@@ -102,7 +99,7 @@ public class RestClientImpl implements RestClient {
 		return call(postUrl, HttpMethod.POST, httpEntity, true);
 	}
 	
-	private ResponseEntity<String> call(String url, HttpMethod httpMethod,	HttpEntity<String> httpEntity, boolean shouldRetry) throws RestRequestFailedException {
+	private ResponseEntity<String> call(String url, HttpMethod httpMethod,	HttpEntity<String> httpEntity, boolean shouldRetry) throws ThirdPartyRequestFailedException {
 		int attemptCount = 1;
 		while (attemptCount <= MAX_ATTEMPTS) {
 			try{
@@ -117,7 +114,7 @@ public class RestClientImpl implements RestClient {
 			catch(HttpClientErrorException e){
 				logger.error("Received HttpClientErrorException while calling Eloqua at url: {}",url, e);
 				logger.error("Response received from Eloqua: {} ", e.getResponseBodyAsString());
-				RestRequestFailedException RequestFailedException = new RestRequestFailedException(e.getMessage() + ". Response - " + e.getResponseBodyAsString());
+				ThirdPartyRequestFailedException RequestFailedException = new ThirdPartyRequestFailedException(e.getMessage() + ". Response - " + e.getResponseBodyAsString());
 				RequestFailedException.setHttpStatusCode(e.getStatusCode());
 				throw RequestFailedException;
 			}
@@ -127,11 +124,11 @@ public class RestClientImpl implements RestClient {
 			}
 			catch (Exception e) {
 				logger.error("Received Generic Exception while calling Eloqua at url: {}",url, e);
-				throw new RestRequestFailedException(e.getMessage());
+				throw new ThirdPartyRequestFailedException(e.getMessage());
 			}
 			if(!shouldRetry){
 				String errorMessage = "Retry is not enabled for this particular call: ".concat(httpMethod.name()).concat(" at URL: ").concat(url);
-				throw new RestRequestFailedException(errorMessage);
+				throw new ThirdPartyRequestFailedException(errorMessage);
 			}
 			if(attemptCount <= MAX_ATTEMPTS){
 				try {
@@ -143,16 +140,11 @@ public class RestClientImpl implements RestClient {
 			}
 		}
 		String errorMessage = "Max retry attempts exhausted while calling ".concat(httpMethod.name()).concat(" at URL: ").concat(url);
-		throw new RestRequestFailedException(errorMessage);
+		throw new ThirdPartyRequestFailedException(errorMessage);
 	}
 
 	void sleep() throws InterruptedException {
 		Thread.sleep(retryIntervalInSecs*1000l);
-	}
-
-	@Override
-	public String getFixerBaseUri() {
-		return fixerBaseUri;
 	}
 
 }

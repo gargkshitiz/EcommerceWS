@@ -18,7 +18,7 @@ import com.google.gson.Gson;
 import com.rakuten.ecommerce.service.ProductService;
 import com.rakuten.ecommerce.service.exception.DataNotFoundException;
 import com.rakuten.ecommerce.service.exception.InvalidClientRequestException;
-import com.rakuten.ecommerce.service.exception.RestRequestFailedException;
+import com.rakuten.ecommerce.service.exception.ThirdPartyRequestFailedException;
 import com.rakuten.ecommerce.web.entities.ProductDetails;
 import com.rakuten.ecommerce.web.swagger.ApiDocumentationConstants;
 
@@ -67,7 +67,7 @@ public class ProductResource {
 			logger.error("Sending back HTTP {} to the caller", e.getHttpStatusCode());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} 
-		catch (RestRequestFailedException e) {
+		catch (ThirdPartyRequestFailedException e) {
 			logger.error(e.getMessage());
 			logger.error("Sending back 503 to the caller");
 			return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
