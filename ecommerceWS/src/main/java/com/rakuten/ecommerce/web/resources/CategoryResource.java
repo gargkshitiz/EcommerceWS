@@ -14,16 +14,16 @@ import com.google.gson.Gson;
 import com.rakuten.ecommerce.service.CategoryService;
 import com.rakuten.ecommerce.service.exception.InvalidClientRequestException;
 import com.rakuten.ecommerce.web.entities.CategoryDetails;
-import com.rakuten.ecommerce.web.util.ApiDocumentation;
+import com.rakuten.ecommerce.web.util.ApiDocumentationConstants;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 /**
  * @author Kshitiz Garg
  */
-@Api(value = ApiDocumentation.CATEGORY)
+@Api(value = ApiDocumentationConstants.CATEGORY)
 @RestController
-@RequestMapping(ApiDocumentation.CATEGORY_API)
+@RequestMapping(ApiDocumentationConstants.CATEGORY_API)
 public class CategoryResource {
  
 	private static final Logger logger = LoggerFactory.getLogger(CategoryResource.class);
@@ -31,7 +31,7 @@ public class CategoryResource {
 	@Autowired
 	private CategoryService categoryService;
 	
-	@ApiOperation(value =  ApiDocumentation.CATEGORY_POST , httpMethod = ApiDocumentation.POST, notes = ApiDocumentation.CATEGORY_POST_NOTES)
+	@ApiOperation(value =  ApiDocumentationConstants.CATEGORY_POST , httpMethod = ApiDocumentationConstants.POST, notes = ApiDocumentationConstants.CATEGORY_POST_NOTES)
 	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON, consumes= MediaType.APPLICATION_JSON)
     public Response save(CategoryDetails categoryDetails){
 		try {

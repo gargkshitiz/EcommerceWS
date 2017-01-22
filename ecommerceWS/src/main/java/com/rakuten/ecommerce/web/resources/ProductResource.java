@@ -14,13 +14,13 @@ import com.google.gson.Gson;
 import com.rakuten.ecommerce.service.ProductService;
 import com.rakuten.ecommerce.service.exception.InvalidClientRequestException;
 import com.rakuten.ecommerce.web.entities.ProductDetails;
-import com.rakuten.ecommerce.web.util.ApiDocumentation;
+import com.rakuten.ecommerce.web.util.ApiDocumentationConstants;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-@Api(value = ApiDocumentation.PRODUCT)
+@Api(value = ApiDocumentationConstants.PRODUCT)
 @RestController
-@RequestMapping(ApiDocumentation.PRODUCT_API)
+@RequestMapping(ApiDocumentationConstants.PRODUCT_API)
 /**
  * @author Kshitiz Garg
  */
@@ -31,7 +31,7 @@ public class ProductResource {
 	@Autowired
 	private ProductService productService;
 	
-	@ApiOperation(value =  ApiDocumentation.PRODUCT_POST , httpMethod = ApiDocumentation.POST, notes = ApiDocumentation.PRODUCT_POST_NOTES)
+	@ApiOperation(value =  ApiDocumentationConstants.PRODUCT_POST , httpMethod = ApiDocumentationConstants.POST, notes = ApiDocumentationConstants.PRODUCT_POST_NOTES)
 	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON, consumes= MediaType.APPLICATION_JSON)
     public Response save(ProductDetails productDetails){
 		try {
@@ -50,7 +50,7 @@ public class ProductResource {
 		}
     }
 
-	@ApiOperation(value =  ApiDocumentation.PRODUCT_GET , httpMethod = ApiDocumentation.GET, notes = ApiDocumentation.PRODUCT_GET_NOTES)
+	@ApiOperation(value =  ApiDocumentationConstants.PRODUCT_GET , httpMethod = ApiDocumentationConstants.GET, notes = ApiDocumentationConstants.PRODUCT_GET_NOTES)
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
     public Response get(){
 		try {

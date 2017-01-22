@@ -2,7 +2,7 @@ package com.rakuten.ecommerce.web.util;
 /**
  * @author Kshitiz Garg
  */
-public interface ApiDocumentation {
+public interface ApiDocumentationConstants {
 
 	String CACHE_CONTROL_PARAM = "Cache-Control";
 
