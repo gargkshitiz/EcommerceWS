@@ -1,4 +1,4 @@
-package com.rakuten.ecommerce.web.util;
+package com.rakuten.ecommerce.web.swagger;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

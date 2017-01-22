@@ -1,5 +1,7 @@
 package com.rakuten.ecommerce.dao.entities;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
@@ -10,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.rakuten.ecommerce.dao.ProductDao;
 /**
@@ -34,6 +37,17 @@ public class Product {
 	@Column(name = "ProductDesc", nullable = false)
 	private String productDesc;
 
+	@Access(AccessType.FIELD)
+	@Column(name = "ProductCurrency", nullable = false)
+	private String productCurrency;
+	
+	@Access(AccessType.FIELD)
+	@Column(name = "PriceVal", nullable = false)
+	private String priceVal;
+	
+	@Transient
+	private transient BigDecimal priceValInDesiredCurrency;
+	
 	public long getProductId() {
 		return productId;
 	}
@@ -48,6 +62,30 @@ public class Product {
 
 	public void setProductDesc(String productDesc) {
 		this.productDesc = productDesc;
+	}
+
+	public String getProductCurrency() {
+		return productCurrency;
+	}
+
+	public void setProductCurrency(String productCurrency) {
+		this.productCurrency = productCurrency;
+	}
+
+	public String getPriceVal() {
+		return priceVal;
+	}
+
+	public void setPriceVal(String priceVal) {
+		this.priceVal = priceVal;
+	}
+
+	public BigDecimal getPriceValInDesiredCurrency() {
+		return priceValInDesiredCurrency;
+	}
+
+	public void setPriceValInDesiredCurrency(BigDecimal priceValInDesiredCurrency) {
+		this.priceValInDesiredCurrency = priceValInDesiredCurrency;
 	}
 
 }

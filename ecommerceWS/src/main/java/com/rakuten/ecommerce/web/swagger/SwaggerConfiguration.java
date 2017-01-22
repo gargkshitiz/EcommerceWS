@@ -1,4 +1,4 @@
-package com.rakuten.ecommerce.web.util;
+package com.rakuten.ecommerce.web.swagger;
 
 import static com.google.common.collect.Lists.newArrayList;
 
@@ -23,8 +23,7 @@ public class SwaggerConfiguration {
 
 	@Bean
     public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2).select().apis(
-           RequestHandlerSelectors.any()).paths(PathSelectors.any()).build()
+        return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.any()).paths(PathSelectors.any()).build()
                 .apiInfo(apiInfo()).globalOperationParameters(
                         newArrayList(new ParameterBuilder()
                                 .name("Authorization")

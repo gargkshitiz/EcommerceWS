@@ -1,4 +1,4 @@
-package com.rakuten.ecommerce.web.util;
+package com.rakuten.ecommerce.web.swagger;
 /**
  * @author Kshitiz Garg
  */

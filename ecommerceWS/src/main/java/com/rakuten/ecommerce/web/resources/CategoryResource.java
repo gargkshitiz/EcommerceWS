@@ -14,7 +14,7 @@ import com.google.gson.Gson;
 import com.rakuten.ecommerce.service.CategoryService;
 import com.rakuten.ecommerce.service.exception.InvalidClientRequestException;
 import com.rakuten.ecommerce.web.entities.CategoryDetails;
-import com.rakuten.ecommerce.web.util.ApiDocumentationConstants;
+import com.rakuten.ecommerce.web.swagger.ApiDocumentationConstants;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 /**
  * @author kgarg
  */
-public class RequestFailedException extends ServiceException {
+public class RestRequestFailedException extends ServiceException {
 
 	/**
 	 * 
@@ -13,7 +13,7 @@ public class RequestFailedException extends ServiceException {
 	private String message;
 	private HttpStatus httpStatusCode;
 	
-	public RequestFailedException(String message) {
+	public RestRequestFailedException(String message) {
 		super(message);
 		this.message = message;
 	}
