@@ -2,6 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
@@ -11,24 +12,23 @@
  	http://www.springframework.org/schema/aop
  	http://www.springframework.org/schema/aop/spring-aop.xsd
  	http://www.springframework.org/schema/task
-	http://www.springframework.org/schema/task/spring-task.xsd">
+	http://www.springframework.org/schema/task/spring-task.xsd
+	http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-    <context:property-placeholder location= "classpath:ecommerceWS.properties, classpath:swagger.properties"/>
+    <context:property-placeholder location= "classpath:ecommerceWS.properties"/>
 	
 	<!-- The following bean takes care of whitespaces in the properties file(s) --> 
 	<bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean" />
 	
-	<import resource="spring-cxf.xml" />
 	<import resource="spring-dao.xml" />
-	<import resource="spring-swagger.xml" />
 
-		
 	<context:annotation-config />
 		
 	<context:component-scan base-package="com.rakuten.ecommerce" />
 
 	<aop:aspectj-autoproxy />
-
+	
  	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
  	        <constructor-arg>
         	<bean class="org.springframework.http.client.HttpComponentsClientHttpRequestFactory">

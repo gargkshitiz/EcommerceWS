@@ -1,28 +1,29 @@
 package com.rakuten.ecommerce.web.resources;
  
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 import com.rakuten.ecommerce.service.CategoryService;
 import com.rakuten.ecommerce.service.exception.InvalidClientRequestException;
 import com.rakuten.ecommerce.web.entities.CategoryDetails;
 import com.rakuten.ecommerce.web.util.ApiDocumentation;
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 /**
  * @author Kshitiz Garg
  */
-@Api(value = ApiDocumentation.CATEGORY, description = ApiDocumentation.CATEGORY_API_DESCRIPTION)
-@Path(ApiDocumentation.CATEGORY_API)
+@Api(value = ApiDocumentation.CATEGORY)
+@RestController
+@RequestMapping(ApiDocumentation.CATEGORY_API)
 public class CategoryResource {
  
 	private static final Logger logger = LoggerFactory.getLogger(CategoryResource.class);
@@ -31,9 +32,7 @@ public class CategoryResource {
 	private CategoryService categoryService;
 	
 	@ApiOperation(value =  ApiDocumentation.CATEGORY_POST , httpMethod = ApiDocumentation.POST, notes = ApiDocumentation.CATEGORY_POST_NOTES)
-	@POST
-    @Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON, consumes= MediaType.APPLICATION_JSON)
     public Response save(CategoryDetails categoryDetails){
 		try {
 			categoryService.persist(categoryDetails);

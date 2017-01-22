@@ -27,6 +27,8 @@ public interface ApiDocumentation {
 	String PRODUCT_API_DESC = "Use this API to submit a user activity or reset isShown flags associated with modal popup and user activities";
 	String PRODUCT_POST = "POSTs a user activity in personalizationWS";
 	String PRODUCT_POST_NOTES = "This API is used for recording user activities, for e.g. to update the latest page view count for a user";
+	String PRODUCT_GET = "POSTs a user activity in personalizationWS";
+	String PRODUCT_GET_NOTES = "This API is used for recording user activities, for e.g. to update the latest page view count for a user";
 	String PRODUCT_PUT = "Persists all modal popup(s) and corresponding condition(s) associated with the published page";
 	String PRODUCT_PUT_NOTES = "Provide all info required from the point of view of modal popup(s) at page publishing time, within request body. It persists all modal popup(s) and corresponding condition(s) associated with the published page";
 	String PRODUCT_DELETE = "Deletes modal pop up, its conditions and all its counts from this system";
@@ -37,6 +39,8 @@ public interface ApiDocumentation {
 	String PRODUCTS_API_DESC = "Use this API to submit a user activity or reset isShown flags associated with modal popup and user activities";
 	String PRODUCTS_POST = "POSTs a user activity in personalizationWS";
 	String PRODUCTS_POST_NOTES = "This API is used for recording user activities, for e.g. to update the latest page view count for a user";
+	String PRODUCTS_GET = "POSTs a user activity in personalizationWS";
+	String PRODUCTS_GET_NOTES = "This API is used for recording user activities, for e.g. to update the latest page view count for a user";
 	String PRODUCTS_PUT = "Persists all modal popup(s) and corresponding condition(s) associated with the published page";
 	String PRODUCTS_PUT_NOTES = "Provide all info required from the point of view of modal popup(s) at page publishing time, within request body. It persists all modal popup(s) and corresponding condition(s) associated with the published page";
 	

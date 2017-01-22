@@ -33,7 +33,7 @@
 		<maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
 		<jdk.version>1.8</jdk.version>
 		<gs.version>6.2.0</gs.version>
-		<swagger-version>1.3.9</swagger-version>
+		<springfox-swagger2-version>2.6.1</springfox-swagger2-version>
 		<equalsVerifierVersion>2.1.6</equalsVerifierVersion>
 		<file.name>ecommerceWS</file.name>
 		<build.number>SNAPSHOT</build.number>
@@ -132,12 +132,7 @@
 		</dependency>
 		<!-- C3P0 jar -->
 		
-		<!-- CXF and Jackson Jars -->
-		<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-rt-frontend-jaxrs</artifactId>
-			<version>${cxf.version}</version>
-		</dependency>
+		<!-- Jackson Jars -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.jaxrs</groupId>
 			<artifactId>jackson-jaxrs-json-provider</artifactId>
@@ -252,10 +247,17 @@
 		<!-- Start - Swagger UI Jar-->
 		
 		<dependency>
-			<groupId>com.wordnik</groupId>
-			<artifactId>swagger-jaxrs_2.10</artifactId>
-			<version>${swagger-version}</version>
+		    <groupId>io.springfox</groupId>
+		    <artifactId>springfox-swagger2</artifactId>
+		    <version>${springfox-swagger2-version}</version>
 		</dependency>
+		
+		<dependency>
+		    <groupId>io.springfox</groupId>
+		    <artifactId>springfox-swagger-ui</artifactId>
+		    <version>${springfox-swagger2-version}</version>
+		</dependency>
+
 		<!-- End - Swagger UI Jar-->
 		
 
