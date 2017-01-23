@@ -114,9 +114,7 @@ public class RestClientImpl implements RestClient {
 			catch(HttpClientErrorException e){
 				logger.error("Received HttpClientErrorException while calling Eloqua at url: {}",url, e);
 				logger.error("Response received from Eloqua: {} ", e.getResponseBodyAsString());
-				ThirdPartyRequestFailedException RequestFailedException = new ThirdPartyRequestFailedException(e.getMessage() + ". Response - " + e.getResponseBodyAsString());
-				RequestFailedException.setHttpStatusCode(e.getStatusCode());
-				throw RequestFailedException;
+				throw new ThirdPartyRequestFailedException(e.getMessage() + ". Response - " + e.getResponseBodyAsString(), e.getStatusCode());
 			}
 			catch (RestClientException e) {
 				logger.error("Try: ".concat(String.valueOf(attemptCount)).concat(". Got a RestClientException while calling Eloqua at:").concat(url), e);
@@ -124,11 +122,11 @@ public class RestClientImpl implements RestClient {
 			}
 			catch (Exception e) {
 				logger.error("Received Generic Exception while calling Eloqua at url: {}",url, e);
-				throw new ThirdPartyRequestFailedException(e.getMessage());
+				throw new ThirdPartyRequestFailedException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 			if(!shouldRetry){
 				String errorMessage = "Retry is not enabled for this particular call: ".concat(httpMethod.name()).concat(" at URL: ").concat(url);
-				throw new ThirdPartyRequestFailedException(errorMessage);
+				throw new ThirdPartyRequestFailedException(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 			if(attemptCount <= MAX_ATTEMPTS){
 				try {
@@ -140,7 +138,7 @@ public class RestClientImpl implements RestClient {
 			}
 		}
 		String errorMessage = "Max retry attempts exhausted while calling ".concat(httpMethod.name()).concat(" at URL: ").concat(url);
-		throw new ThirdPartyRequestFailedException(errorMessage);
+		throw new ThirdPartyRequestFailedException(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	void sleep() throws InterruptedException {

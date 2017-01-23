@@ -30,13 +30,13 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public void persist(CategoryDetails categoryDetails) throws InvalidClientRequestException {
+	public void createCategory(CategoryDetails categoryDetails) throws InvalidClientRequestException {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void persist(Categories categories) {
+	public void createCategories(Categories categories) {
 		// TODO Auto-generated method stub
 		
 	}

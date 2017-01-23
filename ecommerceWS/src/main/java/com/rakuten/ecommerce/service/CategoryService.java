@@ -13,8 +13,8 @@ public interface CategoryService {
 
 	Category get(long categoryId) throws InvalidClientRequestException, DataNotFoundException;
 
-	void persist(CategoryDetails categoryDetails) throws InvalidClientRequestException;
+	void createCategory(CategoryDetails categoryDetails) throws InvalidClientRequestException;
 
-	void persist(Categories categories) throws InvalidClientRequestException;
+	void createCategories(Categories categories) throws InvalidClientRequestException;
 
 }

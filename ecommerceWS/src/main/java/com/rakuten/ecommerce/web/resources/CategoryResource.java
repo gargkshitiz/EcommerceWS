@@ -35,7 +35,7 @@ public class CategoryResource {
 	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON, consumes= MediaType.APPLICATION_JSON)
     public Response save(CategoryDetails categoryDetails){
 		try {
-			categoryService.persist(categoryDetails);
+			categoryService.createCategory(categoryDetails);
 			return Response.ok().build();
 		}
 		catch (InvalidClientRequestException e) {

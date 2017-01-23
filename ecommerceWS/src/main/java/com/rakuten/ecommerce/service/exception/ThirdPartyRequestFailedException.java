@@ -9,21 +9,11 @@ public class ThirdPartyRequestFailedException extends ServiceException {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 652262094764676889L;
-	private String message;
-	private HttpStatus httpStatusCode;
+	private static final long serialVersionUID = -7659869076203386496L;
+	private final HttpStatus httpStatusCode;
 	
-	public ThirdPartyRequestFailedException(String message) {
+	public ThirdPartyRequestFailedException(String message, HttpStatus httpStatusCode) {
 		super(message);
-		this.message = message;
-	}
-
-	@Override
-	public String getMessage() {
-		return message;
-	}
-
-	public void setHttpStatusCode(HttpStatus httpStatusCode) {
 		this.httpStatusCode = httpStatusCode;
 	}
 	

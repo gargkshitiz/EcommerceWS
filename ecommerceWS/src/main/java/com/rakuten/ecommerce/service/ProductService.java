@@ -1,6 +1,7 @@
 package com.rakuten.ecommerce.service;
 
 import com.rakuten.ecommerce.dao.entities.Product;
+import com.rakuten.ecommerce.service.exception.CurrencyNotSupportedException;
 import com.rakuten.ecommerce.service.exception.DataNotFoundException;
 import com.rakuten.ecommerce.service.exception.InvalidClientRequestException;
 import com.rakuten.ecommerce.service.exception.ThirdPartyRequestFailedException;
@@ -12,10 +13,10 @@ import com.rakuten.ecommerce.web.entities.Products;
  */
 public interface ProductService {
 
-	void persist(ProductDetails productDetails) throws InvalidClientRequestException;
+	long createProduct(ProductDetails productDetails) throws InvalidClientRequestException, ThirdPartyRequestFailedException, CurrencyNotSupportedException;
 
-	void persist(Products products) throws InvalidClientRequestException;
+	void createProducts(Products products) throws InvalidClientRequestException, ThirdPartyRequestFailedException, CurrencyNotSupportedException;
 
-	Product get(long productId, String desiredCurrency) throws InvalidClientRequestException, DataNotFoundException, ThirdPartyRequestFailedException;
+	Product get(long productId, String desiredCurrency) throws InvalidClientRequestException, DataNotFoundException, ThirdPartyRequestFailedException, CurrencyNotSupportedException;
 
 }

@@ -1,4 +1,4 @@
-package com.rakuten.ecommerce.service;
+package com.rakuten.ecommerce.service.entities;
 
 import java.math.BigDecimal;
 /**

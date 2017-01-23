@@ -1,30 +1,18 @@
 package com.rakuten.ecommerce.service.exception;
 
-import org.springframework.http.HttpStatus;
 /**
  * @author Kshitiz Garg
  */
-public class DataNotFoundException extends ServiceException {
-
+public class DataNotFoundException extends Exception {
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -6127227305974284314L;
-	private String message;
-	
+	private static final long serialVersionUID = -6418729512867918506L;
+
 	public DataNotFoundException(String message) {
 		super(message);
-		this.message = message;
 	}
 
-	@Override
-	public String getMessage() {
-		return message;
-	}
-
-	@Override
-	public HttpStatus getHttpStatusCode(){
-		return HttpStatus.NOT_FOUND;
-	}
 
 }

@@ -18,6 +18,7 @@ import com.rakuten.ecommerce.web.swagger.ApiDocumentationConstants;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 /**
  * @author Kshitiz Garg
  */
@@ -33,9 +34,9 @@ public class CategoriesResource {
 	
 	@ApiOperation(value =  ApiDocumentationConstants.CATEGORIES_POST , httpMethod = ApiDocumentationConstants.POST, notes = ApiDocumentationConstants.CATEGORIES_POST_NOTES)
 	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON, consumes= MediaType.APPLICATION_JSON)
-    public Response save(Categories categories){
+    public Response save(@ApiParam Categories categories){
 		try {
-			categoryService.persist(categories);
+			categoryService.createCategories(categories);
 			return Response.ok().build();
 		}
 		catch (InvalidClientRequestException e) {

@@ -1,18 +1,24 @@
 package com.rakuten.ecommerce.service.impl;
-
+import java.util.HashSet;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.rakuten.ecommerce.dao.ProductDao;
+import com.rakuten.ecommerce.dao.entities.Category;
 import com.rakuten.ecommerce.dao.entities.Product;
 import com.rakuten.ecommerce.service.CurrencyConvertor;
-import com.rakuten.ecommerce.service.Price;
 import com.rakuten.ecommerce.service.ProductService;
+import com.rakuten.ecommerce.service.entities.Price;
+import com.rakuten.ecommerce.service.exception.CurrencyNotSupportedException;
 import com.rakuten.ecommerce.service.exception.DataNotFoundException;
 import com.rakuten.ecommerce.service.exception.InvalidClientRequestException;
 import com.rakuten.ecommerce.service.exception.ThirdPartyRequestFailedException;
+import com.rakuten.ecommerce.web.entities.CategoryDetails;
 import com.rakuten.ecommerce.web.entities.ProductDetails;
 import com.rakuten.ecommerce.web.entities.Products;
 /**
@@ -30,7 +36,7 @@ public class ProductServiceImpl implements ProductService {
 	private CurrencyConvertor currencyConvertor;
 	
 	@Override
-	public Product get(long productId, String desiredCurrency) throws InvalidClientRequestException, DataNotFoundException, ThirdPartyRequestFailedException {
+	public Product get(long productId, String desiredCurrency) throws InvalidClientRequestException, DataNotFoundException, ThirdPartyRequestFailedException, CurrencyNotSupportedException {
 		logger.info("Fetching product by Id: {}", productId);
 		Product product = dummyProduct();
 		//Product product = productDao.getBy(productId);
@@ -43,21 +49,43 @@ public class ProductServiceImpl implements ProductService {
 	private Product dummyProduct() {
 		Product p = new Product();
 		p.setPrice("100");
-		p.setProductCurrency("INR");
+		p.setProductCurrency("EUR");
 		p.setProductId(10);
 		p.setProductDesc("First product");
 		return p;
 	}
 
 	@Override
-	public void persist(ProductDetails productDetails) throws InvalidClientRequestException{
-		// TODO
+	public long createProduct(ProductDetails productDetails) throws InvalidClientRequestException, ThirdPartyRequestFailedException, CurrencyNotSupportedException{
+		Product product = getProductEntity(productDetails);
+		Price price = currencyConvertor.getPrice(product.getPrice(), product.getProductCurrency(), CurrencyConvertor.EUR);
+		product.setProductCurrency(CurrencyConvertor.EUR);
+		product.setPrice(price.getPriceInEuro().toString());
+		return productDao.persist(product).getProductId();
+	}
+
+	private Product getProductEntity(ProductDetails productDetails) {
+		Product product = new Product();
+		BeanUtils.copyProperties(productDetails, product);
+		Set<Category> categories = null;
+		if(!CollectionUtils.isEmpty(productDetails.getCatgeories())){
+			categories = new HashSet<>();
+			for(CategoryDetails cd : productDetails.getCatgeories()){
+				Category c = new Category();
+				BeanUtils.copyProperties(cd, c);
+				categories.add(c);
+			}
+		}
+		product.setCatgeories(categories);
+		return product;
 	}
 
 	@Override
-	public void persist(Products products) {
-		// TODO Auto-generated method stub
-		
+	public void createProducts(Products products) throws InvalidClientRequestException, ThirdPartyRequestFailedException, CurrencyNotSupportedException {
+		for(ProductDetails p: products.getProducts()){
+			createProduct(p);
+		}
+		// Batch error handling
 	}
 
 }
