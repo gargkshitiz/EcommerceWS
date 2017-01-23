@@ -1,6 +1,8 @@
 package com.rakuten.ecommerce.service.impl;
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -36,23 +38,13 @@ public class ProductServiceImpl implements ProductService {
 	private CurrencyConvertor currencyConvertor;
 	
 	@Override
-	public Product get(long productId, String desiredCurrency) throws InvalidClientRequestException, DataNotFoundException, ThirdPartyRequestFailedException, CurrencyNotSupportedException {
+	public Product getProductWithCategories(long productId, String desiredCurrency) throws InvalidClientRequestException, DataNotFoundException, ThirdPartyRequestFailedException, CurrencyNotSupportedException {
 		logger.info("Fetching product by Id: {}", productId);
-		Product product = dummyProduct();
-		//Product product = productDao.getBy(productId);
+		Product product = productDao.getProduct(productId);
 		Price price = currencyConvertor.getPrice(product.getPrice(), product.getProductCurrency(), desiredCurrency);
 		product.setPriceInEuro(price.getPriceInEuro());
 		product.setPriceInDesiredCurrency(price.getPriceInDesiredCurrency());
 		return product;
-	}
-
-	private Product dummyProduct() {
-		Product p = new Product();
-		p.setPrice("100");
-		p.setProductCurrency("EUR");
-		p.setProductId(10);
-		p.setProductDesc("First product");
-		return p;
 	}
 
 	@Override
@@ -61,6 +53,15 @@ public class ProductServiceImpl implements ProductService {
 		Price price = currencyConvertor.getPrice(product.getPrice(), product.getProductCurrency(), CurrencyConvertor.EUR);
 		product.setProductCurrency(CurrencyConvertor.EUR);
 		product.setPrice(price.getPriceInEuro().toString());
+		long currentTimeMillis = System.currentTimeMillis();
+		product.setCreatedAt(new Timestamp(currentTimeMillis));
+		product.setLastModifiedAt(new Timestamp(currentTimeMillis));
+		if(!CollectionUtils.isEmpty(product.getCatgeories())){
+			for(Category c : product.getCatgeories()){
+				c.setCreatedAt(new Timestamp(currentTimeMillis));
+				c.setLastModifiedAt(new Timestamp(currentTimeMillis));
+			}
+		}
 		return productDao.persist(product).getProductId();
 	}
 

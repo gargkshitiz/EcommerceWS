@@ -1,6 +1,7 @@
 package com.rakuten.ecommerce.dao.entities;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.Set;
 
 import javax.persistence.Access;
@@ -31,11 +32,13 @@ import com.rakuten.ecommerce.dao.ProductDao;
 
 public class Product {
 
+	static final String PRODUCT_ID_COL = "ProductId";
+	
 	public static final String PRODUCT_ID = "productId";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ProductId", unique = true, nullable = false)
+	@Column(name = PRODUCT_ID_COL, unique = true, nullable = false)
 	private long productId;
 
 	@Access(AccessType.FIELD)
@@ -52,7 +55,7 @@ public class Product {
 	
 	@Access(AccessType.FIELD)
 	@ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name="Product_Category", joinColumns={@JoinColumn(name="ProductId")}, inverseJoinColumns={@JoinColumn(name="CategoryId")})
+    @JoinTable(name=Category.PRODUCT_CATEGORY_TABLE, joinColumns={@JoinColumn(name=PRODUCT_ID_COL)}, inverseJoinColumns={@JoinColumn(name=Category.CATEGORY_ID_COL)})
     private Set<Category> catgeories;
 	
 	@Access(AccessType.FIELD)
@@ -67,6 +70,14 @@ public class Product {
 	@Column(name = "ProductType", nullable = false)
     private String productType;
 
+	@Access(AccessType.FIELD)
+	@Column(name = "LastModifiedAt", nullable = false)
+	private Timestamp lastModifiedAt;
+	
+	@Access(AccessType.FIELD)
+	@Column(name = "CreatedAt", nullable = false)
+	private Timestamp createdAt;
+	
 	/**priceInDesiredCurrency and priceInEuro fields are just for retrieval purpose
 	 * and NOT to be persisted at all, hence are marked transient*/
 	@Transient
@@ -153,6 +164,22 @@ public class Product {
 
 	public void setCatgeories(Set<Category> catgeories) {
 		this.catgeories = catgeories;
+	}
+
+	public Timestamp getLastModifiedAt() {
+		return lastModifiedAt;
+	}
+
+	public void setLastModifiedAt(Timestamp lastModifiedAt) {
+		this.lastModifiedAt = lastModifiedAt;
+	}
+
+	public Timestamp getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
 	}
 
 }

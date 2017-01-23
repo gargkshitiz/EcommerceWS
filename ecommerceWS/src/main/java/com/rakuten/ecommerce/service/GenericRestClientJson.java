@@ -7,7 +7,7 @@ import com.rakuten.ecommerce.service.exception.ThirdPartyRequestFailedException;
 /**
  * @author Kshitiz Garg
  */
-public interface RestClient {
+public interface GenericRestClientJson {
 
 	/**
 	 * Performs HTTP GET on service at passed resource. It has inbuilt retries (max {@value #MAX_ATTEMPTS} times) for HTTP_SERVER_ERRORS, i.e. for 5xx status code series

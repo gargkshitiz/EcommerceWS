@@ -39,7 +39,7 @@ public class ProductResource {
 	@RequestMapping(value = "/{productId}" ,method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
     public ResponseEntity<?> get(@PathVariable(name="productId") long productId, @RequestParam("desiredPriceCurrency") String desiredPriceCurrency){
 		try {
-			return new ResponseEntity<>(productService.get(productId, desiredPriceCurrency), HttpStatus.OK);
+			return new ResponseEntity<>(productService.getProductWithCategories(productId, desiredPriceCurrency), HttpStatus.OK);
 		}
 		catch (InvalidClientRequestException | DataNotFoundException e) {
 			logger.error(e.getMessage());

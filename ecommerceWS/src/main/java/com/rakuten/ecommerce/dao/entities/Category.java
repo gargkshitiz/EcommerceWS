@@ -1,5 +1,6 @@
 package com.rakuten.ecommerce.dao.entities;
 
+import java.sql.Timestamp;
 import java.util.Set;
 
 import javax.persistence.Access;
@@ -29,11 +30,15 @@ import com.rakuten.ecommerce.dao.CategoryDao;
  */
 public class Category {
 
+	static final String CATEGORY_ID_COL = "CategoryId";
+
+	static final String PRODUCT_CATEGORY_TABLE = "Product_Category";
+
 	public static final String CATEGORY_ID = "categoryId";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "CategoryId", unique = true, nullable = false)
+	@Column(name = CATEGORY_ID_COL, unique = true, nullable = false)
 	private long categoryId;
 
 	@Access(AccessType.FIELD)
@@ -46,8 +51,16 @@ public class Category {
 	
 	@Access(AccessType.FIELD)
 	@ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name="Product_Category", joinColumns={@JoinColumn(name="CategoryId")}, inverseJoinColumns={@JoinColumn(name="ProductId")})
+    @JoinTable(name=PRODUCT_CATEGORY_TABLE, joinColumns={@JoinColumn(name=CATEGORY_ID_COL)}, inverseJoinColumns={@JoinColumn(name=Product.PRODUCT_ID_COL)})
 	private Set<Product> products ;
+	
+	@Access(AccessType.FIELD)
+	@Column(name = "LastModifiedAt", nullable = false)
+	private Timestamp lastModifiedAt;
+	
+	@Access(AccessType.FIELD)
+	@Column(name = "CreatedAt", nullable = false)
+	private Timestamp createdAt;
 	
 	public long getCategoryId() {
 		return categoryId;
@@ -79,6 +92,22 @@ public class Category {
 
 	public void setProducts(Set<Product> products) {
 		this.products = products;
+	}
+
+	public Timestamp getLastModifiedAt() {
+		return lastModifiedAt;
+	}
+
+	public void setLastModifiedAt(Timestamp lastModifiedAt) {
+		this.lastModifiedAt = lastModifiedAt;
+	}
+
+	public Timestamp getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
 	}
 
 }

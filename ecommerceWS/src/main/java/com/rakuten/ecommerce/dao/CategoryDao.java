@@ -8,6 +8,7 @@ import javax.persistence.Query;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.rakuten.ecommerce.dao.entities.Category;
 /**
@@ -22,6 +23,7 @@ public class CategoryDao {
 	@PersistenceContext
 	private EntityManager entityManager;
 	
+	@Transactional
 	public Category persist(Category category) {
 		entityManager.persist(category);
 		return category;

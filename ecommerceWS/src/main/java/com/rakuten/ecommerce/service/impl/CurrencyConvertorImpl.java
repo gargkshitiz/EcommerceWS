@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 import com.rakuten.ecommerce.service.CurrencyConvertor;
-import com.rakuten.ecommerce.service.RestClient;
+import com.rakuten.ecommerce.service.GenericRestClientJson;
 import com.rakuten.ecommerce.service.entities.Price;
 import com.rakuten.ecommerce.service.exception.CurrencyNotSupportedException;
 import com.rakuten.ecommerce.service.exception.ThirdPartyRequestFailedException;
@@ -27,7 +27,7 @@ public class CurrencyConvertorImpl implements CurrencyConvertor {
 	private String fixerBaseUri;
 	
 	@Autowired
-	private RestClient restClient;
+	private GenericRestClientJson restClient;
 	
 	@Override
 	public Price getPrice(String price, String fromCurrency, String toCurrency) throws ThirdPartyRequestFailedException, CurrencyNotSupportedException{
@@ -65,9 +65,9 @@ public class CurrencyConvertorImpl implements CurrencyConvertor {
 		return new Price(priceInEuro, priceInToCurrency);
 	}
 
-	private Map<Object, Object> getRates(String fromCurrency, String toCurrency)	throws ThirdPartyRequestFailedException, CurrencyNotSupportedException {
-		ResponseEntity<String> responseEntity = restClient.get(fixerBaseUri.toString());
-		Map<Object, Object> rates = (Map<Object, Object>)new Gson().fromJson(responseEntity.getBody(), Map.class).get(RestClient.RATES);
+	private Map<Object, Object> getRates(String fromCurrency, String toCurrency) throws ThirdPartyRequestFailedException, CurrencyNotSupportedException {
+		ResponseEntity<String> responseEntity = restClient.get(fixerBaseUri);
+		Map<Object, Object> rates = (Map<Object, Object>)new Gson().fromJson(responseEntity.getBody(), Map.class).get(GenericRestClientJson.RATES);
 		checkCurrencySupport(rates, fromCurrency);
 		checkCurrencySupport(rates, toCurrency);
 		return rates;
@@ -77,6 +77,10 @@ public class CurrencyConvertorImpl implements CurrencyConvertor {
 		if(!CurrencyConvertor.EUR.equalsIgnoreCase(currency) && !rates.keySet().contains(currency)){
 			throw new CurrencyNotSupportedException(currency.concat(" is not supported by ").concat(fixerBaseUri));
 		}
+	}
+
+	void setFixerBaseUri(String fixerBaseUri) {
+		this.fixerBaseUri = fixerBaseUri;
 	}
 
 }

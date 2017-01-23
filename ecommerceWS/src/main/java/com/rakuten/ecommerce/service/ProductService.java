@@ -17,6 +17,6 @@ public interface ProductService {
 
 	void createProducts(Products products) throws InvalidClientRequestException, ThirdPartyRequestFailedException, CurrencyNotSupportedException;
 
-	Product get(long productId, String desiredCurrency) throws InvalidClientRequestException, DataNotFoundException, ThirdPartyRequestFailedException, CurrencyNotSupportedException;
+	Product getProductWithCategories(long productId, String desiredCurrency) throws InvalidClientRequestException, DataNotFoundException, ThirdPartyRequestFailedException, CurrencyNotSupportedException;
 
 }

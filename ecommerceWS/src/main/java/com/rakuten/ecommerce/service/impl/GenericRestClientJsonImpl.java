@@ -21,15 +21,15 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import com.rakuten.ecommerce.service.RestClient;
+import com.rakuten.ecommerce.service.GenericRestClientJson;
 import com.rakuten.ecommerce.service.exception.ThirdPartyRequestFailedException;
 /**
  * @author Kshitiz Garg
  */
 @Service
-public class RestClientImpl implements RestClient {
+public class GenericRestClientJsonImpl implements GenericRestClientJson {
 	
-	private static final Logger logger = LoggerFactory.getLogger(RestClientImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(GenericRestClientJsonImpl.class);
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -40,7 +40,7 @@ public class RestClientImpl implements RestClient {
 	private long retryIntervalInSecs;
 	
 	@PostConstruct
-	public void setAuthHeader(){
+	public void setContentTypeHeaders(){
 		headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON_UTF8));

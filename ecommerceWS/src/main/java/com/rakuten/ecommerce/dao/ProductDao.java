@@ -8,6 +8,7 @@ import javax.persistence.Query;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.rakuten.ecommerce.dao.entities.Product;
 /**
@@ -22,12 +23,13 @@ public class ProductDao {
 	@PersistenceContext
 	private EntityManager entityManager;
 	
+	@Transactional
 	public Product persist(Product product) {
 		entityManager.persist(product);
 		return product;
 	}
 
-	public Product getBy(long productId) {
+	public Product getProduct(long productId) {
 		Query query = entityManager.createNamedQuery(FETCH_PRODUCT_BY_ID);
 		try{
 			return (Product)query.setParameter(Product.PRODUCT_ID, productId).getSingleResult();
