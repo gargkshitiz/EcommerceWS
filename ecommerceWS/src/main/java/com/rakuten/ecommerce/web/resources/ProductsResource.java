@@ -19,7 +19,7 @@ import com.rakuten.ecommerce.service.ProductService;
 import com.rakuten.ecommerce.service.exception.CurrencyNotSupportedException;
 import com.rakuten.ecommerce.service.exception.InvalidClientRequestException;
 import com.rakuten.ecommerce.service.exception.ThirdPartyRequestFailedException;
-import com.rakuten.ecommerce.web.entities.ProductDetails;
+import com.rakuten.ecommerce.web.entities.ProductFromWeb;
 import com.rakuten.ecommerce.web.swagger.ApiDocumentationConstants;
 
 import io.swagger.annotations.Api;
@@ -40,9 +40,9 @@ public class ProductsResource {
 	@Autowired
 	private ProductService productService;
 	
-	@ApiOperation(value =  ApiDocumentationConstants.PRODUCT_POST , httpMethod = ApiDocumentationConstants.POST, notes = ApiDocumentationConstants.PRODUCT_POST_NOTES)
+	@ApiOperation(value =  ApiDocumentationConstants.PRODUCTS_POST , httpMethod = ApiDocumentationConstants.POST, notes = ApiDocumentationConstants.PRODUCTS_POST_NOTES)
 	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON, consumes= MediaType.APPLICATION_JSON)
-    public @ResponseBody ResponseEntity<String> create(UriComponentsBuilder uriBuilder, @RequestBody @ApiParam ProductDetails productDetails){
+    public @ResponseBody ResponseEntity<String> create(UriComponentsBuilder uriBuilder, @RequestBody @ApiParam ProductFromWeb productDetails){
 		try {
 			long productId = productService.createProduct(productDetails);
 			UriComponents uriComponents = uriBuilder.path(LOCATION).buildAndExpand(productId);

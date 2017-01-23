@@ -1,20 +1,25 @@
 package com.rakuten.ecommerce.service;
 
-import com.rakuten.ecommerce.dao.entities.Category;
+import java.util.List;
+
 import com.rakuten.ecommerce.service.exception.DataNotFoundException;
 import com.rakuten.ecommerce.service.exception.InvalidClientRequestException;
-import com.rakuten.ecommerce.web.entities.Categories;
-import com.rakuten.ecommerce.web.entities.CategoryDetails;
+import com.rakuten.ecommerce.web.entities.CategoryForWeb;
+import com.rakuten.ecommerce.web.entities.CategoryFromWeb;
 
 /**
  * @author Kshitiz Garg
  */
 public interface CategoryService {
 
-	Category get(long categoryId) throws InvalidClientRequestException, DataNotFoundException;
+	CategoryForWeb get(long categoryId) throws InvalidClientRequestException, DataNotFoundException;
 
-	void createCategory(CategoryDetails categoryDetails) throws InvalidClientRequestException;
+	long createCategory(CategoryFromWeb categoryDetails) throws InvalidClientRequestException;
 
-	void createCategories(Categories categories) throws InvalidClientRequestException;
+	List<CategoryForWeb> get(List<Long> categoryIds) throws InvalidClientRequestException, DataNotFoundException;
+
+	void updateCategory(long categoryId, CategoryFromWeb categoryFromWeb) throws InvalidClientRequestException;
+
+	void delete(long categoryId) throws DataNotFoundException;
 
 }

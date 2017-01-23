@@ -5,7 +5,6 @@ import java.util.Set;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -22,7 +21,8 @@ import javax.persistence.Table;
 import com.rakuten.ecommerce.dao.CategoryDao;
 @Entity
 @NamedQueries({
-	@NamedQuery(name=CategoryDao.FETCH_CATEGORY_BY_ID, query="SELECT c FROM Category c where c.categoryId = :" + Category.CATEGORY_ID)
+	@NamedQuery(name=CategoryDao.FETCH_CATEGORY_BY_ID, query="SELECT c FROM Category c where c.categoryId = :" + Category.CATEGORY_ID),
+	@NamedQuery(name=CategoryDao.FETCH_CATEGORIES_BY_IDS, query="SELECT c FROM Category c where c.categoryId in :" + Category.CATEGORY_IDS)
 })
 @Table(name="Category")
 /**
@@ -35,6 +35,8 @@ public class Category {
 	static final String PRODUCT_CATEGORY_TABLE = "Product_Category";
 
 	public static final String CATEGORY_ID = "categoryId";
+	
+	public static final String CATEGORY_IDS = "categoryIds";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,9 +52,17 @@ public class Category {
 	private String categoryName;
 	
 	@Access(AccessType.FIELD)
-	@ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name=PRODUCT_CATEGORY_TABLE, joinColumns={@JoinColumn(name=CATEGORY_ID_COL)}, inverseJoinColumns={@JoinColumn(name=Product.PRODUCT_ID_COL)})
 	private Set<Product> products ;
+
+	/*
+	 * parentCategoryId field is for future.
+	 * It can help to retrieve full category hierarchy
+	 */
+	@Access(AccessType.FIELD)
+	@Column(name = "ParentCategoryId", nullable = false)
+	private long parentCategoryId;
 	
 	@Access(AccessType.FIELD)
 	@Column(name = "LastModifiedAt", nullable = false)
@@ -108,6 +118,14 @@ public class Category {
 
 	public void setCreatedAt(Timestamp createdAt) {
 		this.createdAt = createdAt;
+	}
+
+	public long getParentCategoryId() {
+		return parentCategoryId;
+	}
+
+	public void setParentCategoryId(long parentCategoryId) {
+		this.parentCategoryId = parentCategoryId;
 	}
 
 }

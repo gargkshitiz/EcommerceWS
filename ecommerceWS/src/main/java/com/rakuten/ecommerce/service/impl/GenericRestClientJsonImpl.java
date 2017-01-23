@@ -48,54 +48,54 @@ public class GenericRestClientJsonImpl implements GenericRestClientJson {
 
 	@Override
 	public ResponseEntity<String> get(String resourcePath) throws ThirdPartyRequestFailedException{
-		HttpEntity<String> httpEntity = new HttpEntity<String>(headers);
+		HttpEntity<String> httpEntity = new HttpEntity<>(headers);
 		return call(resourcePath, HttpMethod.GET, httpEntity, true);
 	}
 
 	@Override
 	public ResponseEntity<String> delete(String resourcePath) throws ThirdPartyRequestFailedException{
-		HttpEntity<String> httpEntity = new HttpEntity<String>(headers);
+		HttpEntity<String> httpEntity = new HttpEntity<>(headers);
 		return call(resourcePath, HttpMethod.DELETE, httpEntity, true);
 	}
 	
 	@Override
 	public ResponseEntity<String> post(String resourcePath, String jsonRequestBody) throws ThirdPartyRequestFailedException{
-		HttpEntity<String> httpEntity = new HttpEntity<String>(jsonRequestBody, headers);
+		HttpEntity<String> httpEntity = new HttpEntity<>(jsonRequestBody, headers);
 		return call(resourcePath, HttpMethod.POST, httpEntity, true);
 	}
 	
 	@Override
 	public ResponseEntity<String> post(String resourcePath, String jsonRequestBody, boolean shouldRetry) throws ThirdPartyRequestFailedException{
-		HttpEntity<String> httpEntity = new HttpEntity<String>(jsonRequestBody, headers);
+		HttpEntity<String> httpEntity = new HttpEntity<>(jsonRequestBody, headers);
 		return call(resourcePath, HttpMethod.POST, httpEntity, shouldRetry);
 	}
 	
 	@Override
 	public ResponseEntity<String> put(String resourcePath, String jsonRequestBody) throws ThirdPartyRequestFailedException{
-		HttpEntity<String> httpEntity = new HttpEntity<String>(jsonRequestBody, headers);
+		HttpEntity<String> httpEntity = new HttpEntity<>(jsonRequestBody, headers);
 		return call(resourcePath, HttpMethod.PUT, httpEntity, true);
 	}
 	
 	@Override
 	public ResponseEntity<String> getOnBulkApi(String resourcePath) throws ThirdPartyRequestFailedException {
-		HttpEntity<String> httpEntity = new HttpEntity<String>(headers);
+		HttpEntity<String> httpEntity = new HttpEntity<>(headers);
 		return call(resourcePath, HttpMethod.GET, httpEntity, true);
 	}
 	
 	@Override
 	public ResponseEntity<String> postOnBulkApi(String resourcePath, String jsonRequestBody) throws ThirdPartyRequestFailedException {
-		HttpEntity<String> httpEntity = new HttpEntity<String>(jsonRequestBody, headers);
+		HttpEntity<String> httpEntity = new HttpEntity<>(jsonRequestBody, headers);
 		return call(resourcePath, HttpMethod.POST, httpEntity, true);
 	}
 	
 	@Override
 	public ResponseEntity<String> post(String postUrl, String requestBody, String contentType, String charSet) throws ThirdPartyRequestFailedException {
 		HttpHeaders customHeaders = new HttpHeaders();
-		List<Charset> acceptableCharsets = new ArrayList<Charset>();
+		List<Charset> acceptableCharsets = new ArrayList<>();
 	    acceptableCharsets.add(Charset.forName(charSet));
 	    customHeaders.setContentType(MediaType.valueOf(contentType));
 	    customHeaders.setAcceptCharset(acceptableCharsets);
-		HttpEntity<String> httpEntity = new HttpEntity<String>(requestBody, customHeaders);
+		HttpEntity<String> httpEntity = new HttpEntity<>(requestBody, customHeaders);
 		return call(postUrl, HttpMethod.POST, httpEntity, true);
 	}
 	

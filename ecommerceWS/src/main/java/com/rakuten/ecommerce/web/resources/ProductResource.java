@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rakuten.ecommerce.service.ProductService;
 import com.rakuten.ecommerce.service.exception.CurrencyNotSupportedException;
 import com.rakuten.ecommerce.service.exception.DataNotFoundException;
-import com.rakuten.ecommerce.service.exception.InvalidClientRequestException;
 import com.rakuten.ecommerce.service.exception.ThirdPartyRequestFailedException;
 import com.rakuten.ecommerce.web.swagger.ApiDocumentationConstants;
 
@@ -24,7 +23,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 @Api(value = ApiDocumentationConstants.PRODUCT)
 @RestController
-@RequestMapping(ApiDocumentationConstants.PRODUCT_API)
+@RequestMapping(ApiDocumentationConstants.PRODUCT_API+"/{productId}")
 /**
  * @author Kshitiz Garg
  */
@@ -36,12 +35,12 @@ public class ProductResource {
 	private ProductService productService;
 	
 	@ApiOperation(value =  ApiDocumentationConstants.PRODUCT_GET , httpMethod = ApiDocumentationConstants.GET, notes = ApiDocumentationConstants.PRODUCT_GET_NOTES)
-	@RequestMapping(value = "/{productId}" ,method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
+	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
     public ResponseEntity<?> get(@PathVariable(name="productId") long productId, @RequestParam("desiredPriceCurrency") String desiredPriceCurrency){
 		try {
 			return new ResponseEntity<>(productService.getProductWithCategories(productId, desiredPriceCurrency), HttpStatus.OK);
 		}
-		catch (InvalidClientRequestException | DataNotFoundException e) {
+		catch (DataNotFoundException e) {
 			logger.error(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} 

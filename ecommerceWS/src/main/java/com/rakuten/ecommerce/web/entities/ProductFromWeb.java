@@ -1,7 +1,7 @@
 package com.rakuten.ecommerce.web.entities;
 
 import java.util.Currency;
-import java.util.Set;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -13,12 +13,12 @@ import io.swagger.annotations.ApiModel;
  * @author Kshitiz Garg
  */
 @ApiModel
-public class ProductDetails {
+public class ProductFromWeb {
 
 	private String productDesc;
 	private String productCurrency;
 	private String price;
-    private Set<CategoryDetails> catgeories;
+    private List<Long> catgeoryIds;
 	private long unitsInStock;
     private String productCode;
     private String productType;
@@ -50,12 +50,6 @@ public class ProductDetails {
 	public void setPrice(String price) {
 		this.price = price;
 	}
-	public Set<CategoryDetails> getCatgeories() {
-		return catgeories;
-	}
-	public void setCatgeories(Set<CategoryDetails> catgeories) {
-		this.catgeories = catgeories;
-	}
 	public long getUnitsInStock() {
 		return unitsInStock;
 	}
@@ -73,6 +67,12 @@ public class ProductDetails {
 	}
 	public void setProductType(String productType) {
 		this.productType = productType;
+	}
+	public List<Long> getCatgeoryIds() {
+		return catgeoryIds;
+	}
+	public void setCatgeoryIds(List<Long> catgeoryIds) {
+		this.catgeoryIds = catgeoryIds;
 	}
 	
 }

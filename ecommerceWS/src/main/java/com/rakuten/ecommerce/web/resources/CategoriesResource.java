@@ -1,19 +1,23 @@
 package com.rakuten.ecommerce.web.resources;
  
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import com.google.gson.Gson;
 import com.rakuten.ecommerce.service.CategoryService;
 import com.rakuten.ecommerce.service.exception.InvalidClientRequestException;
-import com.rakuten.ecommerce.web.entities.Categories;
+import com.rakuten.ecommerce.web.entities.CategoryFromWeb;
 import com.rakuten.ecommerce.web.swagger.ApiDocumentationConstants;
 
 import io.swagger.annotations.Api;
@@ -32,22 +36,24 @@ public class CategoriesResource {
 	@Autowired
 	private CategoryService categoryService;
 	
+	private static final String LOCATION = ApiDocumentationConstants.CATEGORY_API + "/{id}";
+	
 	@ApiOperation(value =  ApiDocumentationConstants.CATEGORIES_POST , httpMethod = ApiDocumentationConstants.POST, notes = ApiDocumentationConstants.CATEGORIES_POST_NOTES)
 	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON, consumes= MediaType.APPLICATION_JSON)
-    public Response save(@ApiParam Categories categories){
+    public @ResponseBody ResponseEntity<String> create(UriComponentsBuilder uriBuilder, @RequestBody @ApiParam CategoryFromWeb categoryFromWeb){
 		try {
-			categoryService.createCategories(categories);
-			return Response.ok().build();
+			long categoryId = categoryService.createCategory(categoryFromWeb);
+			UriComponents uriComponents = uriBuilder.path(LOCATION).buildAndExpand(categoryId);
+			return ResponseEntity.created(uriComponents.toUri()).build();
 		}
 		catch (InvalidClientRequestException e) {
 			logger.error(e.getMessage());
 			logger.error("Sending back HTTP {} to the caller", e.getHttpStatusCode());
-			return Response.status(e.getHttpStatusCode().value()).entity(new Gson().toJson(e.getMessage())).build();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} 
 		catch (Exception e) {
-			String msg = "Error persisting categories : "+categories;
-			logger.error(msg, e);
-			return Response.serverError().entity(new Gson().toJson(msg)).build();
+			logger.error("Error creating category for details:{} ",categoryFromWeb, e);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
     }
 
