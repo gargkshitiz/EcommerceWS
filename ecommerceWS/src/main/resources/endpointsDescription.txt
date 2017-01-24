@@ -146,12 +146,12 @@ Products GET
 
 	Here I have choosen to return category objects as well (which are lazily loaded in the backend). I could have simply returned the category Ids and then client could also fetch the categories details as per its requirements.
 
-Products PATCH
+Products PUT
 ===============
 
 	Request
 	--------
-	curl -X PATCH --header 'Content-Type: application/json' --header 'Accept: */*' --header 'Authorization: Basic a3NoaXRpejpyYWt1dGVuMTIz' -d '{ \
+	curl -X PUT --header 'Content-Type: application/json' --header 'Accept: */*' --header 'Authorization: Basic a3NoaXRpejpyYWt1dGVuMTIz' -d '{ \
 	  "productDesc": "Pamper Active Baby Diaper", \
 	  "productCurrency": "INR", \
 	  "price": "136.92", \

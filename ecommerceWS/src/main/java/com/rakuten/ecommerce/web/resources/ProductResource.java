@@ -89,11 +89,11 @@ public class ProductResource {
 		}
     }
 	
-	@ApiOperation(value =  ApiDocumentationConstants.PRODUCT_PATCH , httpMethod = ApiDocumentationConstants.PATCH, notes = ApiDocumentationConstants.PRODUCT_PATCH_NOTES)
-	@RequestMapping(method = RequestMethod.PATCH)
-    public ResponseEntity<?> patch(@PathVariable(name=PRODUCT_ID) long productId, @RequestBody @ApiParam ProductFromWeb productFromWeb ){
+	@ApiOperation(value =  ApiDocumentationConstants.PRODUCT_PUT , httpMethod = ApiDocumentationConstants.PUT, notes = ApiDocumentationConstants.PRODUCT_PUT_NOTES)
+	@RequestMapping(method = RequestMethod.PUT)
+    public ResponseEntity<?> put(@PathVariable(name=PRODUCT_ID) long productId, @RequestBody @ApiParam ProductFromWeb productFromWeb ){
 		try {
-			productService.patchProduct(productId, productFromWeb);
+			productService.updateProduct(productId, productFromWeb);
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 		catch (DataNotFoundException e) {
@@ -109,7 +109,7 @@ public class ProductResource {
 			return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
 		}
 		catch (Exception e) {
-			logger.error("Error patching product against productId:{} ", productId, e);
+			logger.error("Error updating product against productId:{} ", productId, e);
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
     }

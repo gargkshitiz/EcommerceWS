@@ -20,7 +20,6 @@ public interface ApiDocumentationConstants {
 	String POST = "POST";
 	String PUT = "PUT";
 	String DELETE = "DELETE";
-	String PATCH = "PATCH";
 
 	String PRODUCT = "product";
 	String PRODUCT_API = "/"+PRODUCT;
@@ -33,8 +32,6 @@ public interface ApiDocumentationConstants {
 	String PRODUCT_PUT_NOTES = "Provide all info required from the point of view of modal popup(s) at page publishing time, within request body. It persists all modal popup(s) and corresponding condition(s) associated with the published page";
 	String PRODUCT_DELETE = "Deletes modal pop up, its conditions and all its counts from this system";
 	String PRODUCT_DELETE_NOTES = "Deletes modal pop up, its conditions and all its counts from personalizatioWS. All history for the modal pop would also be wiped off with this call";
-	String PRODUCT_PATCH = "Deletes modal pop up, its conditions and all its counts from this system";
-	String PRODUCT_PATCH_NOTES = "Deletes modal pop up, its conditions and all its counts from personalizatioWS. All history for the modal pop would also be wiped off with this call";
 	
 	String PRODUCTS = "products";
 	String PRODUCTS_API = "/"+PRODUCTS;
@@ -53,8 +50,6 @@ public interface ApiDocumentationConstants {
 	String CATEGORY_GET_NOTES = "Provide basic info like page path, user role, access type etc in request body and this API would fetch modal pop ups(s) fulfiling the configured condition(s)";
 	String CATEGORY_PUT = "Persists all modal popup(s) and corresponding condition(s) associated with the published page";
 	String CATEGORY_PUT_NOTES = "Provide all info required from the point of view of modal popup(s) at page publishing time, within request body. It persists all modal popup(s) and corresponding condition(s) associated with the published page";
-	String CATEGORY_PATCH = "Persists all modal popup(s) and corresponding condition(s) associated with the published page";
-	String CATEGORY_PATCH_NOTES = "Provide all info required from the point of view of modal popup(s) at page publishing time, within request body. It persists all modal popup(s) and corresponding condition(s) associated with the published page";
 	String CATEGORY_DELETE = "Deletes modal pop up, its conditions and all its counts from this system";
 	String CATEGORY_DELETE_NOTES = "Deletes modal pop up, its conditions and all its counts from personalizatioWS. All history for the modal pop would also be wiped off with this call";
 	

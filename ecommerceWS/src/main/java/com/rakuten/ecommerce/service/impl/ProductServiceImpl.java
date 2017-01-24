@@ -127,8 +127,8 @@ public class ProductServiceImpl implements ProductService {
 
 	@Transactional
 	@Override
-	public void patchProduct(long productId, ProductFromWeb productFromWeb) throws DataNotFoundException, InvalidClientRequestException, ThirdPartyRequestFailedException, CurrencyNotSupportedException {
-		logger.info("Patching product with Id: {}", productId);
+	public void updateProduct(long productId, ProductFromWeb productFromWeb) throws DataNotFoundException, InvalidClientRequestException, ThirdPartyRequestFailedException, CurrencyNotSupportedException {
+		logger.info("Updating product with Id: {}", productId);
 		Product product = validateExistence(productId);
 		BeanUtils.copyProperties(productFromWeb, product);
 		Price price = currencyConvertor.getPrice(product.getPrice(), product.getProductCurrency(), CurrencyConvertor.EUR);
