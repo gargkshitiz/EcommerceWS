@@ -53,7 +53,7 @@ public class ProductResource {
 	})
 	@ApiOperation(value =  ApiDocumentationConstants.PRODUCT_GET , httpMethod = ApiDocumentationConstants.GET, notes = ApiDocumentationConstants.PRODUCT_GET_NOTES)
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
-    public ResponseEntity<?> get(@PathVariable(name=PRODUCT_ID) long productId, @RequestParam("desiredPriceCurrency") String desiredPriceCurrency){
+    public ResponseEntity<?> get(@PathVariable(name=PRODUCT_ID) long productId, @RequestParam(value = "desiredPriceCurrency", required=false) String desiredPriceCurrency){
 		try {
 			return new ResponseEntity<>(productService.getProductWithCategories(productId, desiredPriceCurrency), noCacheHeaders(), HttpStatus.OK);
 		}
