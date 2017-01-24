@@ -23,42 +23,34 @@ public interface ApiDocumentationConstants {
 
 	String PRODUCT = "product";
 	String PRODUCT_API = "/"+PRODUCT;
-	String PRODUCT_API_DESC = "Use this API to submit a user activity or reset isShown flags associated with modal popup and user activities";
-	String PRODUCT_POST = "POSTs a user activity in personalizationWS";
-	String PRODUCT_POST_NOTES = "This API is used for recording user activities, for e.g. to update the latest page view count for a user";
-	String PRODUCT_GET = "POSTs a user activity in personalizationWS";
-	String PRODUCT_GET_NOTES = "This API is used for recording user activities, for e.g. to update the latest page view count for a user";
-	String PRODUCT_PUT = "Persists all modal popup(s) and corresponding condition(s) associated with the published page";
-	String PRODUCT_PUT_NOTES = "Provide all info required from the point of view of modal popup(s) at page publishing time, within request body. It persists all modal popup(s) and corresponding condition(s) associated with the published page";
-	String PRODUCT_DELETE = "Deletes modal pop up, its conditions and all its counts from this system";
-	String PRODUCT_DELETE_NOTES = "Deletes modal pop up, its conditions and all its counts from personalizatioWS. All history for the modal pop would also be wiped off with this call";
+	String PRODUCT_API_DESC = "API to fetch, update or delete a product";
+	String PRODUCT_GET = "Fetches an existing product from ecommerceWS";
+	String PRODUCT_GET_NOTES = "Here client could also request to see the price of the product in a desiredPriceCurrency (alongwith prices in EURO, which comes back by default) using a query parameter. Here associated categories are being returned as well (which are lazily loaded in the backend)";
+	String PRODUCT_PUT = "Updates a product's details in ecommerceWS";
+	String PRODUCT_PUT_NOTES = "We could change productDesc, productCurrency, price, catgeoryIds, unitsInStock, productCode, productType etc. New price in a new currency can also be given here";
+	String PRODUCT_DELETE = "Deletes a product and all of its category mappings from ecommerceWS";
+	String PRODUCT_DELETE_NOTES = "Categories would not be impacted, only the relavant productCategory mappings would be wiped off";
 	
 	String PRODUCTS = "products";
 	String PRODUCTS_API = "/"+PRODUCTS;
-	String PRODUCTS_API_DESC = "Use this API to submit a user activity or reset isShown flags associated with modal popup and user activities";
-	String PRODUCTS_POST = "POSTs a user activity in personalizationWS";
-	String PRODUCTS_POST_NOTES = "This API is used for recording user activities, for e.g. to update the latest page view count for a user";
-	String PRODUCTS_GET = "POSTs a user activity in personalizationWS";
-	String PRODUCTS_GET_NOTES = "This API is used for recording user activities, for e.g. to update the latest page view count for a user";
+	String PRODUCTS_API_DESC = "API to create a new product in ecommerceWS";
+	String PRODUCTS_POST = "Creates a new product in  ecommerceWS";
+	String PRODUCTS_POST_NOTES = "Input catgeoryIds could be valid category id(s) OR absent (no category for product at the moment). Check 'location' header for the create productId";
 	
 	String CATEGORY = "category";
 	String CATEGORY_API = "/"+CATEGORY;
-	String CATEGORY_API_DESCRIPTION = "This API is used for modal pop(s). Use POST for fetching modal pop ups(s) fulfiling the configured condition(s). Creation (PUT) and deletion (DELETE) of modal pop up(s) are also possible";
-	String CATEGORY_POST = "Fetches modal pop ups(s) fulfiling the configured condition(s)";
-	String CATEGORY_POST_NOTES = "Provide basic info like page path, user role, access type etc in request body and this API would fetch modal pop ups(s) fulfiling the configured condition(s)";
-	String CATEGORY_GET = "Fetches modal pop ups(s) fulfiling the configured condition(s)";
-	String CATEGORY_GET_NOTES = "Provide basic info like page path, user role, access type etc in request body and this API would fetch modal pop ups(s) fulfiling the configured condition(s)";
-	String CATEGORY_PUT = "Persists all modal popup(s) and corresponding condition(s) associated with the published page";
-	String CATEGORY_PUT_NOTES = "Provide all info required from the point of view of modal popup(s) at page publishing time, within request body. It persists all modal popup(s) and corresponding condition(s) associated with the published page";
-	String CATEGORY_DELETE = "Deletes modal pop up, its conditions and all its counts from this system";
-	String CATEGORY_DELETE_NOTES = "Deletes modal pop up, its conditions and all its counts from personalizatioWS. All history for the modal pop would also be wiped off with this call";
+	String CATEGORY_API_DESCRIPTION = "API to fetch, update or delete a category";
+	String CATEGORY_GET = "Fetches an existing category from ecommerceWS";
+	String CATEGORY_GET_NOTES = "In the response body, -1 parentCategoryId signifies no parent category exists for this category";
+	String CATEGORY_PUT = "Updates a category details in ecommerceWS";
+	String CATEGORY_PUT_NOTES = "Here we could change categoryDesc, categoryName, parentCategoryId. parentCategoryId should be a valid categoryId. -1 is reserved for no parent and hence is allowed too";
+	String CATEGORY_DELETE = "Deletes a category and all of its product mappings from ecommerceWS";
+	String CATEGORY_DELETE_NOTES = "Products would not be impacted, only the relavant productCategory mappings would be wiped off";
 	
 	String CATEGORIES = "categories";
 	String CATEGORIES_API = "/"+CATEGORIES;
 	String CATEGORIES_API_DESCRIPTION = "This API is used for modal pop(s). Use POST for fetching modal pop ups(s) fulfiling the configured condition(s). Creation (PUT) and deletion (DELETE) of modal pop up(s) are also possible";
-	String CATEGORIES_POST = "Fetches modal pop ups(s) fulfiling the configured condition(s)";
-	String CATEGORIES_POST_NOTES = "Provide basic info like page path, user role, access type etc in request body and this API would fetch modal pop ups(s) fulfiling the configured condition(s)";
-	String CATEGORIES_GET = "Persists all modal popup(s) and corresponding condition(s) associated with the published page";
-	String CATEGORIES_GET_NOTES = "Provide all info required from the point of view of modal popup(s) at page publishing time, within request body. It persists all modal popup(s) and corresponding condition(s) associated with the published page";
+	String CATEGORIES_POST = "Creates a new category in  ecommerceWS";
+	String CATEGORIES_POST_NOTES = "From the request, parent category Id could be absent (no parent) OR -1 (no parent) or a valid category id (valid parent)";
 
 }

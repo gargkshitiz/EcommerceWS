@@ -17,8 +17,9 @@ import com.rakuten.ecommerce.dao.ProductCategoryDao;
 import com.rakuten.ecommerce.dao.entities.Category;
 import com.rakuten.ecommerce.service.CategoryService;
 import com.rakuten.ecommerce.service.exception.DataNotFoundException;
-import com.rakuten.ecommerce.web.entities.CategoryForWeb;
-import com.rakuten.ecommerce.web.entities.CategoryFromWeb;
+import com.rakuten.ecommerce.service.exception.InvalidClientRequestException;
+import com.rakuten.ecommerce.web.entities.CategoryResponse;
+import com.rakuten.ecommerce.web.entities.CategoryRequest;
 /**
  * @author Kshitiz Garg
  */
@@ -34,19 +35,19 @@ public class CategoryServiceImpl implements CategoryService {
 	private ProductCategoryDao productCategoryDao;
 	
 	@Override
-	public CategoryForWeb getCategory(long categoryId) throws DataNotFoundException {
+	public CategoryResponse getCategory(long categoryId) throws DataNotFoundException {
 		logger.info("Fetching category by Id: {}", categoryId);
 		Category category = validateExistence(categoryId);
-		CategoryForWeb categoryForWeb = new CategoryForWeb();
-		BeanUtils.copyProperties(category, categoryForWeb);
-		return categoryForWeb;
+		CategoryResponse categoryResponse = new CategoryResponse();
+		BeanUtils.copyProperties(category, categoryResponse);
+		return categoryResponse;
 	}
 
 	@Override
-	public long createCategory(CategoryFromWeb categoryFromWeb) {
-		logger.info("Creating category with details: {}", categoryFromWeb);
+	public long createCategory(CategoryRequest categoryRequest) {
+		logger.info("Creating category with details: {}", categoryRequest);
 		Category category = new Category();
-		BeanUtils.copyProperties(categoryFromWeb, category);
+		BeanUtils.copyProperties(categoryRequest, category);
 		long currentTimeMillis = System.currentTimeMillis();
 		category.setCreatedAt(new Timestamp(currentTimeMillis));
 		category.setLastModifiedAt(new Timestamp(currentTimeMillis));
@@ -54,14 +55,17 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 	
 	@Override
-	public void updateCategory(long categoryId, CategoryFromWeb categoryFromWeb) throws DataNotFoundException {
+	public void updateCategory(long categoryId, CategoryRequest categoryRequest) throws DataNotFoundException, InvalidClientRequestException {
 		logger.info("Updating category with Id: {}", categoryId);
 		Category category = validateExistence(categoryId);
-		long parentCategoryId = categoryFromWeb.getParentCategoryId();
+		long parentCategoryId = categoryRequest.getParentCategoryId();
+		if(categoryId ==  parentCategoryId){
+			throw new InvalidClientRequestException("parentCategoryId and categoryId can't be same");
+		}
 		if(parentCategoryId != -1){
 			validateExistence(parentCategoryId);
 		}
-		BeanUtils.copyProperties(categoryFromWeb, category);
+		BeanUtils.copyProperties(categoryRequest, category);
 		category.setLastModifiedAt(new Timestamp(System.currentTimeMillis()));
 		categoryDao.merge(category);
 	}
@@ -75,19 +79,19 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public List<CategoryForWeb> getCategories(List<Long> categoryIds) throws DataNotFoundException {
+	public List<CategoryResponse> getCategories(List<Long> categoryIds) throws DataNotFoundException {
 		logger.info("Fetching categories against Ids: {}", categoryIds);
 		List<Category> categories = categoryDao.getBy(categoryIds);
 		if(CollectionUtils.isEmpty(categories)){
 			throw new DataNotFoundException("No categories exist against Ids: "+ categoryIds);
 		}
-		List<CategoryForWeb> categoriesForWeb = new ArrayList<>();
+		List<CategoryResponse> categoryResponses = new ArrayList<>();
 		for(Category c: categories){
-			CategoryForWeb cfw = new CategoryForWeb();
+			CategoryResponse cfw = new CategoryResponse();
 			BeanUtils.copyProperties(c, cfw);
-			categoriesForWeb.add(cfw);
+			categoryResponses.add(cfw);
 		}
-		return categoriesForWeb;
+		return categoryResponses;
 	}
 
 	@Transactional

@@ -13,7 +13,7 @@ import io.swagger.annotations.ApiModel;
  * @author Kshitiz Garg
  */
 @ApiModel
-public class ProductFromWeb {
+public class ProductRequest {
 
 	private String productDesc;
 	private String productCurrency;

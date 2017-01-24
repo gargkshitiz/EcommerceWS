@@ -2,7 +2,7 @@ package com.rakuten.ecommerce.web.entities;
 
 import java.sql.Timestamp;
 
-public class CategoryForWeb {
+public class CategoryResponse {
 
 	private long categoryId;
 

@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Set;
 
-public class ProductForWeb {
+public class ProductResponse {
 	
 	private long productId;
 	
@@ -14,7 +14,7 @@ public class ProductForWeb {
 	
 	private String price;
 	
-	private Set<CategoryForWeb> catgeories;
+	private Set<CategoryResponse> catgeories;
 	
 	private long unitsInStock;
 	
@@ -102,11 +102,11 @@ public class ProductForWeb {
 		this.unitsInStock = unitsInStock;
 	}
 
-	public Set<CategoryForWeb> getCatgeories() {
+	public Set<CategoryResponse> getCatgeories() {
 		return catgeories;
 	}
 
-	public void setCatgeories(Set<CategoryForWeb> catgeories) {
+	public void setCatgeories(Set<CategoryResponse> catgeories) {
 		this.catgeories = catgeories;
 	}
 

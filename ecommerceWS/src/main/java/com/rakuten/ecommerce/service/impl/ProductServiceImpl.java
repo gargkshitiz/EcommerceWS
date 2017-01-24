@@ -26,9 +26,9 @@ import com.rakuten.ecommerce.service.exception.CurrencyNotSupportedException;
 import com.rakuten.ecommerce.service.exception.DataNotFoundException;
 import com.rakuten.ecommerce.service.exception.InvalidClientRequestException;
 import com.rakuten.ecommerce.service.exception.ThirdPartyRequestFailedException;
-import com.rakuten.ecommerce.web.entities.CategoryForWeb;
-import com.rakuten.ecommerce.web.entities.ProductForWeb;
-import com.rakuten.ecommerce.web.entities.ProductFromWeb;
+import com.rakuten.ecommerce.web.entities.CategoryResponse;
+import com.rakuten.ecommerce.web.entities.ProductResponse;
+import com.rakuten.ecommerce.web.entities.ProductRequest;
 /**
  * @author Kshitiz Garg
  */
@@ -51,39 +51,39 @@ public class ProductServiceImpl implements ProductService {
 	
 	@Override
 	@Transactional
-	public ProductForWeb getProductWithCategories(long productId, String desiredCurrency) throws DataNotFoundException, ThirdPartyRequestFailedException, CurrencyNotSupportedException {
+	public ProductResponse getProductWithCategories(long productId, String desiredCurrency) throws DataNotFoundException, ThirdPartyRequestFailedException, CurrencyNotSupportedException {
 		logger.info("Fetching product by Id: {}", productId);
 		Product product = validateExistence(productId);
-		ProductForWeb productForWeb = new ProductForWeb();
-		BeanUtils.copyProperties(product, productForWeb);
-		Set<CategoryForWeb> categories ;
+		ProductResponse productResponse = new ProductResponse();
+		BeanUtils.copyProperties(product, productResponse);
+		Set<CategoryResponse> categoryResponses ;
 		if(!CollectionUtils.isEmpty(product.getCatgeories())){
-			categories = new HashSet<>();
+			categoryResponses = new HashSet<>();
 			for(Category cd : product.getCatgeories()){
-				CategoryForWeb c = new CategoryForWeb();
+				CategoryResponse c = new CategoryResponse();
 				BeanUtils.copyProperties(cd, c);
-				categories.add(c);
+				categoryResponses.add(c);
 			}
-			productForWeb.setCatgeories(categories);
+			productResponse.setCatgeories(categoryResponses);
 		}
 		Price price = currencyConvertor.getPrice(product.getPrice(), product.getProductCurrency(), desiredCurrency);
-		productForWeb.setPriceInEuro(price.getPriceInEuro());
-		productForWeb.setPriceInDesiredCurrency(price.getPriceInDesiredCurrency());
-		return productForWeb;
+		productResponse.setPriceInEuro(price.getPriceInEuro());
+		productResponse.setPriceInDesiredCurrency(price.getPriceInDesiredCurrency());
+		return productResponse;
 	}
 
 	@Transactional
 	@Override
-	public long createProduct(ProductFromWeb productDetails) throws InvalidClientRequestException, ThirdPartyRequestFailedException, CurrencyNotSupportedException{
+	public long createProduct(ProductRequest productRequest) throws InvalidClientRequestException, ThirdPartyRequestFailedException, CurrencyNotSupportedException{
 		long currentTimeMillis = System.currentTimeMillis();
-		Product product = getProductEntity(productDetails);
+		Product product = getProductEntity(productRequest);
 		Price price = currencyConvertor.getPrice(product.getPrice(), product.getProductCurrency(), CurrencyConvertor.EUR);
 		product.setProductCurrency(CurrencyConvertor.EUR);
 		product.setPrice(price.getPriceInEuro().toString());
 		product.setCreatedAt(new Timestamp(currentTimeMillis));
 		product.setLastModifiedAt(new Timestamp(currentTimeMillis));
 		productDao.persist(product);
-		List<String> categoryIds = productDetails.getCatgeoryIds();
+		List<String> categoryIds = productRequest.getCatgeoryIds();
 		persistProductCategoryMappings(product, categoryIds);
 		return product.getProductId();
 	}
@@ -102,9 +102,9 @@ public class ProductServiceImpl implements ProductService {
 		}
 	}
 
-	private Product getProductEntity(ProductFromWeb productDetails) {
+	private Product getProductEntity(ProductRequest productRequest) {
 		Product product = new Product();
-		BeanUtils.copyProperties(productDetails, product);
+		BeanUtils.copyProperties(productRequest, product);
 		return product;
 	}
 
@@ -127,16 +127,16 @@ public class ProductServiceImpl implements ProductService {
 
 	@Transactional
 	@Override
-	public void updateProduct(long productId, ProductFromWeb productFromWeb) throws DataNotFoundException, InvalidClientRequestException, ThirdPartyRequestFailedException, CurrencyNotSupportedException {
+	public void updateProduct(long productId, ProductRequest productRequest) throws DataNotFoundException, InvalidClientRequestException, ThirdPartyRequestFailedException, CurrencyNotSupportedException {
 		logger.info("Updating product with Id: {}", productId);
 		Product product = validateExistence(productId);
-		BeanUtils.copyProperties(productFromWeb, product);
+		BeanUtils.copyProperties(productRequest, product);
 		Price price = currencyConvertor.getPrice(product.getPrice(), product.getProductCurrency(), CurrencyConvertor.EUR);
 		product.setProductCurrency(CurrencyConvertor.EUR);
 		product.setPrice(price.getPriceInEuro().toString());
 		product.setLastModifiedAt(new Timestamp(System.currentTimeMillis()));
 		productDao.merge(product);
-		List<String> categoryIds = productFromWeb.getCatgeoryIds();
+		List<String> categoryIds = productRequest.getCatgeoryIds();
 		if(!CollectionUtils.isEmpty(categoryIds)){
 			productCategoryDao.removeByProduct(productId);
 		}

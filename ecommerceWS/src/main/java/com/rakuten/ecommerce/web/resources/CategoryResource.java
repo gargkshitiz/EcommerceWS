@@ -12,16 +12,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rakuten.ecommerce.service.CategoryService;
 import com.rakuten.ecommerce.service.exception.DataNotFoundException;
-import com.rakuten.ecommerce.web.entities.CategoryFromWeb;
+import com.rakuten.ecommerce.service.exception.InvalidClientRequestException;
+import com.rakuten.ecommerce.web.entities.CategoryRequest;
 import com.rakuten.ecommerce.web.swagger.ApiDocumentationConstants;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 /**
  * @author Kshitiz Garg
  */
@@ -37,6 +41,12 @@ public class CategoryResource {
 	@Autowired
 	private CategoryService categoryService;
 	
+	@ResponseStatus
+	@ApiResponses(value = {
+		@ApiResponse(code = 200, message = "Category fetched successfully"),
+		@ApiResponse(code = 400, message = "Bad request"),
+		@ApiResponse(code = 404, message = "Entity not Found")
+	})
 	@ApiOperation(value =  ApiDocumentationConstants.CATEGORY_GET , httpMethod = ApiDocumentationConstants.GET, notes = ApiDocumentationConstants.CATEGORY_GET_NOTES)
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
     public ResponseEntity<?> get(@PathVariable(name=CATEGORY_ID) long categoryId){
@@ -53,14 +63,20 @@ public class CategoryResource {
 		}
     }
 	
+	@ResponseStatus
+	@ApiResponses(value = {
+		@ApiResponse(code = 204, message = "Category updated successfully"),
+		@ApiResponse(code = 400, message = "Bad request"),
+		@ApiResponse(code = 404, message = "Entity not Found")
+	})
 	@ApiOperation(value =  ApiDocumentationConstants.CATEGORY_PUT , httpMethod = ApiDocumentationConstants.PUT, notes = ApiDocumentationConstants.CATEGORY_PUT_NOTES)
 	@RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON)
-    public ResponseEntity<?> put(@PathVariable(name=CATEGORY_ID) long categoryId, @RequestBody @ApiParam CategoryFromWeb categoryFromWeb){
+    public ResponseEntity<?> put(@PathVariable(name=CATEGORY_ID) long categoryId, @RequestBody @ApiParam CategoryRequest categoryRequest){
 		try {
-			categoryService.updateCategory(categoryId, categoryFromWeb);
+			categoryService.updateCategory(categoryId, categoryRequest);
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
-		catch (DataNotFoundException e) {
+		catch (DataNotFoundException | InvalidClientRequestException e) {
 			logger.error(e.getMessage());
 			return new ResponseEntity<>(e.getHttpStatusCode());
 		}
@@ -70,6 +86,12 @@ public class CategoryResource {
 		}
     }
 	
+	@ResponseStatus
+	@ApiResponses(value = {
+		@ApiResponse(code = 204, message = "Category deleted successfully"),
+		@ApiResponse(code = 400, message = "Bad request"),
+		@ApiResponse(code = 404, message = "Entity not Found")
+	})
 	@ApiOperation(value =  ApiDocumentationConstants.CATEGORY_DELETE , httpMethod = ApiDocumentationConstants.DELETE, notes = ApiDocumentationConstants.CATEGORY_DELETE_NOTES)
 	@RequestMapping(method = RequestMethod.DELETE)
     public ResponseEntity<?> delete(@PathVariable(name=CATEGORY_ID) long categoryId){

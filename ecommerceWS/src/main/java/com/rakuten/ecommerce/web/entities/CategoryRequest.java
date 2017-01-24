@@ -2,7 +2,7 @@ package com.rakuten.ecommerce.web.entities;
 /**
  * @author Kshitiz Garg
  */
-public class CategoryFromWeb {
+public class CategoryRequest {
 	
 	private String categoryDesc;
 

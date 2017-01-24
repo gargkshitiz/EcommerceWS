@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -19,12 +20,14 @@ import com.rakuten.ecommerce.service.ProductService;
 import com.rakuten.ecommerce.service.exception.CurrencyNotSupportedException;
 import com.rakuten.ecommerce.service.exception.InvalidClientRequestException;
 import com.rakuten.ecommerce.service.exception.ThirdPartyRequestFailedException;
-import com.rakuten.ecommerce.web.entities.ProductFromWeb;
+import com.rakuten.ecommerce.web.entities.ProductRequest;
 import com.rakuten.ecommerce.web.swagger.ApiDocumentationConstants;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 /**
  * @author Kshitiz Garg
  */
@@ -40,11 +43,18 @@ public class ProductsResource {
 	@Autowired
 	private ProductService productService;
 	
+	@ResponseStatus
+	@ApiResponses(value = {
+        @ApiResponse(code = 201, message = "Category created successfully"),
+        @ApiResponse(code = 400, message = "Bad request"),
+        @ApiResponse(code = 412, message = "Currency not supported"),
+        @ApiResponse(code = 503, message = "Currency conversion service not available")
+	})
 	@ApiOperation(value =  ApiDocumentationConstants.PRODUCTS_POST , httpMethod = ApiDocumentationConstants.POST, notes = ApiDocumentationConstants.PRODUCTS_POST_NOTES)
 	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON, consumes= MediaType.APPLICATION_JSON)
-    public @ResponseBody ResponseEntity<String> create(UriComponentsBuilder uriBuilder, @RequestBody @ApiParam ProductFromWeb productDetails){
+    public @ResponseBody ResponseEntity<String> create(UriComponentsBuilder uriBuilder, @RequestBody @ApiParam ProductRequest productRequest){
 		try {
-			long productId = productService.createProduct(productDetails);
+			long productId = productService.createProduct(productRequest);
 			UriComponents uriComponents = uriBuilder.path(LOCATION).buildAndExpand(productId);
 			return ResponseEntity.created(uriComponents.toUri()).build();
 		}
@@ -63,7 +73,7 @@ public class ProductsResource {
 			return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
 		}
 		catch (Exception e) {
-			logger.error("Error creating product for details:{} ",productDetails, e);
+			logger.error("Error creating product for details:{} ",productRequest, e);
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
     }

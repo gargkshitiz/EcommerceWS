@@ -1,4 +1,4 @@
-package com.rakuten.ecommerce.web.filters;
+package com.rakuten.ecommerce.web.util;
 
 import java.util.UUID;
 

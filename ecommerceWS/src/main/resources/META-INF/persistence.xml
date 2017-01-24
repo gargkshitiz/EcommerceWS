@@ -6,5 +6,7 @@
              version="2.1">
 	<persistence-unit name="ecommercePersistenceUnit">
 	 	<class>com.rakuten.ecommerce.dao.entities.Product</class>
+	 	<class>com.rakuten.ecommerce.dao.entities.Category</class>
+	 	<class>com.rakuten.ecommerce.dao.entities.ProductCategory</class>
 	</persistence-unit>
 </persistence>
