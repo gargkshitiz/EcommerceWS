@@ -1,4 +1,4 @@
-USE [Personalization]
+USE [Ecommerce]
 GO
 
 SET ANSI_NULLS ON

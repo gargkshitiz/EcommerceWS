@@ -70,23 +70,6 @@ public class CategoryResource {
 		}
     }
 	
-	@ApiOperation(value =  ApiDocumentationConstants.CATEGORY_PATCH , httpMethod = ApiDocumentationConstants.PATCH, notes = ApiDocumentationConstants.CATEGORY_PATCH_NOTES)
-	@RequestMapping(method = RequestMethod.PATCH, consumes = MediaType.APPLICATION_JSON)
-    public ResponseEntity<?> patch(@PathVariable(name=CATEGORY_ID) long categoryId, @RequestBody @ApiParam CategoryFromWeb categoryFromWeb){
-		try {
-			categoryService.patchCategory(categoryId, categoryFromWeb);
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		}
-		catch (DataNotFoundException e) {
-			logger.error(e.getMessage());
-			return new ResponseEntity<>(e.getHttpStatusCode());
-		}
-		catch (Exception e) {
-			logger.error("Error updating category details for id:{} ", categoryId, e);
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-    }
-	
 	@ApiOperation(value =  ApiDocumentationConstants.CATEGORY_DELETE , httpMethod = ApiDocumentationConstants.DELETE, notes = ApiDocumentationConstants.CATEGORY_DELETE_NOTES)
 	@RequestMapping(method = RequestMethod.DELETE)
     public ResponseEntity<?> delete(@PathVariable(name=CATEGORY_ID) long categoryId){

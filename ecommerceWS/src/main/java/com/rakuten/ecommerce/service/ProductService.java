@@ -18,6 +18,6 @@ public interface ProductService {
 
 	void deleteProduct(long productId) throws DataNotFoundException;
 
-	void patchProduct(long productId, ProductFromWeb productFromWeb) throws DataNotFoundException;
+	void patchProduct(long productId, ProductFromWeb productFromWeb) throws DataNotFoundException, InvalidClientRequestException, ThirdPartyRequestFailedException, CurrencyNotSupportedException;
 
 }

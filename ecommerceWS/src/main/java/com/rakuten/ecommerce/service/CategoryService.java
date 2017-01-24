@@ -19,8 +19,6 @@ public interface CategoryService {
 
 	void deleteCategory(long categoryId) throws DataNotFoundException;
 	
-	void patchCategory(long categoryId, CategoryFromWeb categoryFromWeb) throws DataNotFoundException;
-
 	List<CategoryForWeb> getCategories(List<Long> categoryIds) throws DataNotFoundException;
 
 }

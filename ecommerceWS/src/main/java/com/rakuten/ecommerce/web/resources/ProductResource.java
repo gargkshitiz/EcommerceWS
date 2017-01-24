@@ -100,6 +100,14 @@ public class ProductResource {
 			logger.error(e.getMessage());
 			return new ResponseEntity<>(e.getHttpStatusCode());
 		} 
+		catch (ThirdPartyRequestFailedException e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
+		}
+		catch (CurrencyNotSupportedException e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
+		}
 		catch (Exception e) {
 			logger.error("Error patching product against productId:{} ", productId, e);
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

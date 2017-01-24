@@ -161,7 +161,8 @@ Products PATCH
 	  "productType": "Diaper" \
 	}' 'http://localhost:8090/ecommerceWS/product/1'
 
-	Here we are changing productDesc, productCurrency,price, catgeoryIds, unitsInStock, productCode, productType etc.
+	Here we could change productDesc, productCurrency,price, catgeoryIds, unitsInStock, productCode, productType etc.
+	new price in a new currency can also be given here
 
 	Response status
 	----------------

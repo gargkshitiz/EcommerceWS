@@ -125,13 +125,22 @@ public class ProductServiceImpl implements ProductService {
 		return product;
 	}
 
+	@Transactional
 	@Override
-	public void patchProduct(long productId, ProductFromWeb productFromWeb) throws DataNotFoundException {
+	public void patchProduct(long productId, ProductFromWeb productFromWeb) throws DataNotFoundException, InvalidClientRequestException, ThirdPartyRequestFailedException, CurrencyNotSupportedException {
 		logger.info("Patching product with Id: {}", productId);
 		Product product = validateExistence(productId);
 		BeanUtils.copyProperties(productFromWeb, product);
+		Price price = currencyConvertor.getPrice(product.getPrice(), product.getProductCurrency(), CurrencyConvertor.EUR);
+		product.setProductCurrency(CurrencyConvertor.EUR);
+		product.setPrice(price.getPriceInEuro().toString());
 		product.setLastModifiedAt(new Timestamp(System.currentTimeMillis()));
 		productDao.merge(product);
+		List<String> categoryIds = productFromWeb.getCatgeoryIds();
+		if(!CollectionUtils.isEmpty(categoryIds)){
+			productCategoryDao.removeByProduct(productId);
+		}
+		persistProductCategoryMappings(product, categoryIds);
 	}
 
 }

@@ -51,5 +51,4 @@ public class CategoriesResource {
 		}
     }
 
-	// TODO GET with offset
 }

@@ -17,7 +17,6 @@ import com.rakuten.ecommerce.dao.ProductCategoryDao;
 import com.rakuten.ecommerce.dao.entities.Category;
 import com.rakuten.ecommerce.service.CategoryService;
 import com.rakuten.ecommerce.service.exception.DataNotFoundException;
-import com.rakuten.ecommerce.service.exception.InvalidClientRequestException;
 import com.rakuten.ecommerce.web.entities.CategoryForWeb;
 import com.rakuten.ecommerce.web.entities.CategoryFromWeb;
 /**
@@ -98,13 +97,6 @@ public class CategoryServiceImpl implements CategoryService {
 		Category category = validateExistence(categoryId);
 		categoryDao.remove(category);
 		productCategoryDao.removeByCategory(categoryId);
-	}
-
-	@Override
-	public void patchCategory(long categoryId, CategoryFromWeb categoryFromWeb) throws DataNotFoundException {
-		logger.info("Patching category with Id: {}", categoryId);
-		Category category = validateExistence(categoryId);
-		// TODO Auto-generated method stub
 	}
 
 }
