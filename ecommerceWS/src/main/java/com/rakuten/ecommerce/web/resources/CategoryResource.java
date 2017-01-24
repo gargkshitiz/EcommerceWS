@@ -58,7 +58,7 @@ public class CategoryResource {
     public ResponseEntity<?> put(@PathVariable(name=CATEGORY_ID) long categoryId, @RequestBody @ApiParam CategoryFromWeb categoryFromWeb){
 		try {
 			categoryService.updateCategory(categoryId, categoryFromWeb);
-			return new ResponseEntity<>(HttpStatus.OK);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 		catch (DataNotFoundException e) {
 			logger.error(e.getMessage());
@@ -75,7 +75,7 @@ public class CategoryResource {
     public ResponseEntity<?> patch(@PathVariable(name=CATEGORY_ID) long categoryId, @RequestBody @ApiParam CategoryFromWeb categoryFromWeb){
 		try {
 			categoryService.patchCategory(categoryId, categoryFromWeb);
-			return new ResponseEntity<>(HttpStatus.OK);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 		catch (DataNotFoundException e) {
 			logger.error(e.getMessage());
@@ -92,7 +92,7 @@ public class CategoryResource {
     public ResponseEntity<?> delete(@PathVariable(name=CATEGORY_ID) long categoryId){
 		try {
 			categoryService.deleteCategory(categoryId);
-			return new ResponseEntity<>(HttpStatus.OK);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 		catch (DataNotFoundException e) {
 			logger.error(e.getMessage());

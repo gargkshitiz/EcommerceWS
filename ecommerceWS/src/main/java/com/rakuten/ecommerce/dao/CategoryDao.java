@@ -38,7 +38,7 @@ public class CategoryDao {
 			return (Category)query.setParameter(Category.CATEGORY_ID, categoryId).getSingleResult();
 		}
 		catch(NoResultException e){
-			/*We can't rethrow this exception, as that would be an 
+			/*Don't rethrow this exception, as that would be an 
 			indicator to Spring-retry module and that will retry 
 			unnecessarily*/
 			return null;

@@ -1,0 +1,179 @@
+Categories POST
+================
+	Request
+	--------
+	curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' --header 'Authorization: Basic a3NoaXRpejpyYWt1dGVuMTIz' -d '{ \ 
+	   "categoryDesc": "Baby Diapers", \ 
+	   "categoryName": "Baby Diapers", \ 
+	   "parentCategoryId": -1 \ 
+	 }' 'http://localhost:8090/ecommerceWS/categories'
+
+	Here parent category Id could be absent (no parent) OR -1 (no parent) or a valid category id (valid parent)
+	
+	Response status
+	----------------
+	201, 400, 500
+	
+	Response header
+	----------------
+	"location": "http://localhost:8090/ecommerceWS/category/1",
+
+
+Category GET
+================
+
+	Request
+	--------
+	curl -X GET --header 'Accept: application/json' --header 'Authorization: Basic a3NoaXRpejpyYWt1dGVuMTIz' 'http://localhost:8090/ecommerceWS/category/1'
+
+	Response status
+	----------------
+	200, 400, 404, 500
+	
+	Response body
+	--------------
+	{
+	  "categoryId": 1,
+	  "categoryDesc": "Baby Diapers",
+	  "categoryName": "Baby Diapers",
+	  "parentCategoryId": -1,
+	  "lastModifiedAt": 1485243886973,
+	  "createdAt": 1485243886973
+	}
+
+	-1 signifies no parent 
+
+Category PUT
+=============
+
+	Request
+	--------
+	curl -X PUT --header 'Content-Type: application/json' --header 'Accept: */*' --header 'Authorization: Basic a3NoaXRpejpyYWt1dGVuMTIz' -d '{ \ 
+	   "categoryDesc": "Baby Diapers", \ 
+	   "categoryName": "Baby Diapers", \ 
+	   "parentCategoryId": 2 \ 
+	 }' 'http://localhost:8090/ecommerceWS/category/1'
+
+	Here we could change categoryDesc,categoryName, parentCategoryId (valid categoryId. -1 is reserved for no parent and hence is allowed too).
+
+	Response status
+	----------------
+	204, 400, 404, 500
+
+Category DELETE
+================
+
+	Request
+	--------
+	curl -X DELETE --header 'Accept: */*' --header 'Authorization: Basic a3NoaXRpejpyYWt1dGVuMTIz' 'http://localhost:8090/ecommerceWS/category/1'
+
+	Response status
+	----------------
+	204, 404, 500
+	
+
+Products POST
+================
+	Request
+	--------
+	curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' --header 'Authorization: Basic a3NoaXRpejpyYWt1dGVuMTIz' -d '{ \
+		"productDesc":"Pamper Active Baby Diaper", \
+		"productCurrency":"INR", \
+		"price":"10000", \
+		"catgeoryIds":[1,2], \
+		"unitsInStock":2, \
+		"productCode":"pamp_diap", \
+		"productType":"Diaper" \
+	}' 'http://localhost:8090/ecommerceWS/products'
+
+	Here catgeoryIds could be valid category id(s) OR absent (no category for product at the moment)
+	
+	Response status
+	----------------
+	201, 400, 500
+	
+	Response header
+	----------------
+	"location": "http://localhost:8090/ecommerceWS/product/1",
+
+
+Products GET
+================
+
+	Request
+	--------
+	curl -X GET --header 'Accept: application/json' --header 'Authorization: Basic a3NoaXRpejpyYWt1dGVuMTIz' 'http://localhost:8090/ecommerceWS/product/1?desiredPriceCurrency=SGD'
+
+	Here client could also request to see the price of the product in a desiredPriceCurrency (alongwith prices in EURO, which comes back by default)
+	
+	Response status
+	----------------
+	200, 400, 404, 500
+	
+	Response body
+	--------------
+	{
+	  "productId": 1,
+	  "productDesc": "Pamper Active Baby Diaper",
+	  "productCurrency": "EUR",
+	  "price": "136.92",
+	  "catgeories": [
+		{
+		  "categoryId": 1,
+		  "categoryDesc": "Baby Diapers",
+		  "categoryName": "Baby Diapers",
+		  "parentCategoryId": -1,
+		  "lastModifiedAt": 1485248880653,
+		  "createdAt": 1485248880653
+		},
+		{
+		  "categoryId": 2,
+		  "categoryDesc": "Baby Diapers",
+		  "categoryName": "Baby Diapers",
+		  "parentCategoryId": -1,
+		  "lastModifiedAt": 1485249070523,
+		  "createdAt": 1485249070523
+		}
+	  ],
+	  "unitsInStock": 2,
+	  "productCode": "pamp_diap",
+	  "productType": "Diaper",
+	  "lastModifiedAt": 1485249078910,
+	  "createdAt": 1485249078910,
+	  "priceInDesiredCurrency": 208.52,
+	  "priceInEuro": 136.92
+	}
+
+	Here I have choosen to return category objects as well (which are lazily loaded in the backend). I could have simply returned the category Ids and then client could also fetch the categories details as per its requirements.
+
+Products PATCH
+===============
+
+	Request
+	--------
+	curl -X PATCH --header 'Content-Type: application/json' --header 'Accept: */*' --header 'Authorization: Basic a3NoaXRpejpyYWt1dGVuMTIz' -d '{ \
+	  "productDesc": "Pamper Active Baby Diaper", \
+	  "productCurrency": "INR", \
+	  "price": "136.92", \
+	  "catgeoryIds":[2,3], \
+	  "unitsInStock": 3, \
+	  "productCode": "pamp_diap", \
+	  "productType": "Diaper" \
+	}' 'http://localhost:8090/ecommerceWS/product/1'
+
+	Here we are changing productDesc, productCurrency,price, catgeoryIds, unitsInStock, productCode, productType etc.
+
+	Response status
+	----------------
+	204, 400, 404, 500
+
+Products DELETE
+================
+
+	Request
+	--------
+	curl -X DELETE --header 'Accept: */*' --header 'Authorization: Basic a3NoaXRpejpyYWt1dGVuMTIz' 'http://localhost:8090/ecommerceWS/product/1'
+	
+	Response status
+	----------------
+	204, 404, 500

@@ -4,8 +4,16 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+
+import com.rakuten.ecommerce.dao.ProductCategoryDao;
 @Entity
+@NamedQueries({
+	@NamedQuery(name=ProductCategoryDao.DELETE_PROD_CAT_MAPPING_BY_PROD_ID, query="DELETE FROM ProductCategory p where p.productId = :" + Product.PRODUCT_ID),
+	@NamedQuery(name=ProductCategoryDao.DELETE_PROD_CAT_MAPPING_BY_CAT_ID, query="DELETE FROM ProductCategory p where p.categoryId = :" + Category.CATEGORY_ID)
+})
 @IdClass(ProductCategoryId.class)
 @Table(name="ProductCategory")
 public class ProductCategory {

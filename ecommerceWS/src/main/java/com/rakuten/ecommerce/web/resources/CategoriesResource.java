@@ -16,7 +16,6 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.rakuten.ecommerce.service.CategoryService;
-import com.rakuten.ecommerce.service.exception.InvalidClientRequestException;
 import com.rakuten.ecommerce.web.entities.CategoryFromWeb;
 import com.rakuten.ecommerce.web.swagger.ApiDocumentationConstants;
 
@@ -46,11 +45,6 @@ public class CategoriesResource {
 			UriComponents uriComponents = uriBuilder.path(LOCATION).buildAndExpand(categoryId);
 			return ResponseEntity.created(uriComponents.toUri()).build();
 		}
-		catch (InvalidClientRequestException e) {
-			logger.error(e.getMessage());
-			logger.error("Sending back HTTP {} to the caller", e.getHttpStatusCode());
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		} 
 		catch (Exception e) {
 			logger.error("Error creating category for details:{} ",categoryFromWeb, e);
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

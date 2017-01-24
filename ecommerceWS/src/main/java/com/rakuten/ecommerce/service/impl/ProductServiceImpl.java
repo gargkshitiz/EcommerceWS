@@ -3,6 +3,7 @@ import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +41,9 @@ public class ProductServiceImpl implements ProductService {
 	private ProductDao productDao;
 	
 	@Autowired
+	private CategoryDao categoryDao;
+	
+	@Autowired
 	private ProductCategoryDao productCategoryDao;
 	
 	@Autowired
@@ -49,7 +53,7 @@ public class ProductServiceImpl implements ProductService {
 	@Transactional
 	public ProductForWeb getProductWithCategories(long productId, String desiredCurrency) throws DataNotFoundException, ThirdPartyRequestFailedException, CurrencyNotSupportedException {
 		logger.info("Fetching product by Id: {}", productId);
-		Product product = productDao.getProduct(productId);
+		Product product = validateExistence(productId);
 		ProductForWeb productForWeb = new ProductForWeb();
 		BeanUtils.copyProperties(product, productForWeb);
 		Set<CategoryForWeb> categories ;
@@ -68,6 +72,7 @@ public class ProductServiceImpl implements ProductService {
 		return productForWeb;
 	}
 
+	@Transactional
 	@Override
 	public long createProduct(ProductFromWeb productDetails) throws InvalidClientRequestException, ThirdPartyRequestFailedException, CurrencyNotSupportedException{
 		long currentTimeMillis = System.currentTimeMillis();
@@ -79,20 +84,22 @@ public class ProductServiceImpl implements ProductService {
 		product.setLastModifiedAt(new Timestamp(currentTimeMillis));
 		productDao.persist(product);
 		List<String> categoryIds = productDetails.getCatgeoryIds();
+		persistProductCategoryMappings(product, categoryIds);
+		return product.getProductId();
+	}
+
+	private void persistProductCategoryMappings(Product product, List<String> categoryIds)	throws InvalidClientRequestException {
 		if(!CollectionUtils.isEmpty(categoryIds)){
+			List<Long> categoryIdsLong = categoryIds.parallelStream().map(c -> Long.valueOf(c)).collect(Collectors.toList());
+			List<Category> categories = categoryDao.getBy(categoryIdsLong);
+			if(categories.size()!=categoryIds.size()){
+				throw new InvalidClientRequestException("CategoryIds should be unique and valid (if present)");
+			}
 			for(String categoryId: categoryIds){
-				long catgeory;
-				try{
-					catgeory = Long.parseLong(categoryId);
-				}
-				catch(Exception e){
-					throw new InvalidClientRequestException("CategoryIds should be valid (if present)");
-				}
-				ProductCategory pc = new ProductCategory(product.getProductId(), catgeory);
+				ProductCategory pc = new ProductCategory(product.getProductId(), Long.valueOf(categoryId));
 				productCategoryDao.persist(pc);
 			}
 		}
-		return product.getProductId();
 	}
 
 	private Product getProductEntity(ProductFromWeb productDetails) {
@@ -101,21 +108,13 @@ public class ProductServiceImpl implements ProductService {
 		return product;
 	}
 
-	@Override
-	public void updateProduct(long productId, ProductFromWeb productFromWeb) throws DataNotFoundException {
-		logger.info("Updating product with Id: {}", productId);
-		Product product = validateExistence(productId);
-		BeanUtils.copyProperties(productFromWeb, product);
-		product.setLastModifiedAt(new Timestamp(System.currentTimeMillis()));
-		productDao.merge(product);
-		
-	}
-
+	@Transactional
 	@Override
 	public void deleteProduct(long productId) throws DataNotFoundException {
 		logger.info("Deleting product with Id: {}", productId);
 		Product product = validateExistence(productId);
 		productDao.remove(product);
+		productCategoryDao.removeByProduct(productId);
 	}
 
 	private Product validateExistence(long productId) throws DataNotFoundException {
@@ -127,10 +126,12 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public void patchProduct(long productId) throws DataNotFoundException {
+	public void patchProduct(long productId, ProductFromWeb productFromWeb) throws DataNotFoundException {
 		logger.info("Patching product with Id: {}", productId);
 		Product product = validateExistence(productId);
-		// TODO
+		BeanUtils.copyProperties(productFromWeb, product);
+		product.setLastModifiedAt(new Timestamp(System.currentTimeMillis()));
+		productDao.merge(product);
 	}
 
 }

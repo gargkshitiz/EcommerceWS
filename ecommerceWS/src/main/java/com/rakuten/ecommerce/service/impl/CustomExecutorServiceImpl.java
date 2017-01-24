@@ -41,7 +41,7 @@ public class CustomExecutorServiceImpl implements CustomExecutorService {
     @PostConstruct
     public void createExecutor(){
         backgroundExecutor = MdcThreadPoolExecutor.newWithInheritedMdc(threadPoolSize,threadFactory);
-        log.info("Created thread pool for recording activities with pool size: {}", threadPoolSize);
+        log.info("Created thread pool with pool size: {}", threadPoolSize);
     }
    
     @Override

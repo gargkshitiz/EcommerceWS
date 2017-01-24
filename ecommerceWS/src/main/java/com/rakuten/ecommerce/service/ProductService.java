@@ -16,10 +16,8 @@ public interface ProductService {
 
 	ProductForWeb getProductWithCategories(long productId, String desiredCurrency) throws DataNotFoundException, ThirdPartyRequestFailedException, CurrencyNotSupportedException;
 
-	void updateProduct(long productId, ProductFromWeb productFromWeb) throws DataNotFoundException;
-
 	void deleteProduct(long productId) throws DataNotFoundException;
 
-	void patchProduct(long productId) throws DataNotFoundException;
+	void patchProduct(long productId, ProductFromWeb productFromWeb) throws DataNotFoundException;
 
 }

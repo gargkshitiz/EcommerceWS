@@ -39,18 +39,22 @@
 	
 	<!-- 3rdparty Loggers -->
 	<logger name="org.springframework">
-		<level value="DEBUG" />
+		<level value="ERROR" />
 	</logger>
 
 	<logger name="org.hibernate">
-		<level value="DEBUG" />
+		<level value="ERROR" />
 	</logger>
 
 	<logger name="org.apache">
-		<level value="DEBUG" />
+		<level value="ERROR" />
 	</logger>
 	
-	<logger name="com.wordnik">
+	<logger name="io.swagger">
+		<level value="ERROR" />
+	</logger>
+	
+	<logger name="springfox.documentation">
 		<level value="ERROR" />
 	</logger>
 	

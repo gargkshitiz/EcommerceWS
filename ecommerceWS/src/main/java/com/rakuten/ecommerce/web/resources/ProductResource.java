@@ -72,29 +72,12 @@ public class ProductResource {
 		return headers;
 	}
 	
-	@ApiOperation(value =  ApiDocumentationConstants.PRODUCT_PUT , httpMethod = ApiDocumentationConstants.PUT, notes = ApiDocumentationConstants.PRODUCT_PUT_NOTES)
-	@RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON)
-    public ResponseEntity<?> put(@PathVariable(name=PRODUCT_ID) long productId, @RequestBody @ApiParam ProductFromWeb productFromWeb){
-		try {
-			productService.updateProduct(productId, productFromWeb);
-			return new ResponseEntity<>(HttpStatus.OK);
-		}
-		catch (DataNotFoundException e) {
-			logger.error(e.getMessage());
-			return new ResponseEntity<>(e.getHttpStatusCode());
-		}
-		catch (Exception e) {
-			logger.error("Error updating product details against productId:{} ", productId, e);
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-    }
-	
 	@ApiOperation(value =  ApiDocumentationConstants.PRODUCT_DELETE , httpMethod = ApiDocumentationConstants.DELETE, notes = ApiDocumentationConstants.PRODUCT_DELETE_NOTES)
 	@RequestMapping(method = RequestMethod.DELETE)
     public ResponseEntity<?> delete(@PathVariable(name=PRODUCT_ID) long productId){
 		try {
 			productService.deleteProduct(productId);
-			return new ResponseEntity<>(HttpStatus.OK);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 		catch (DataNotFoundException e) {
 			logger.error(e.getMessage());
@@ -110,8 +93,8 @@ public class ProductResource {
 	@RequestMapping(method = RequestMethod.PATCH)
     public ResponseEntity<?> patch(@PathVariable(name=PRODUCT_ID) long productId, @RequestBody @ApiParam ProductFromWeb productFromWeb ){
 		try {
-			productService.patchProduct(productId);
-			return new ResponseEntity<>(HttpStatus.OK);
+			productService.patchProduct(productId, productFromWeb);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 		catch (DataNotFoundException e) {
 			logger.error(e.getMessage());

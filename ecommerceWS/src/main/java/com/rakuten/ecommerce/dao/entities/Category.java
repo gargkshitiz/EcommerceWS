@@ -32,7 +32,7 @@ public class Category {
 
 	static final String CATEGORY_ID_COL = "CategoryId";
 
-	static final String PRODUCT_CATEGORY_TABLE = "Product_Category";
+	static final String PRODUCT_CATEGORY_TABLE = "ProductCategory";
 
 	public static final String CATEGORY_ID = "categoryId";
 	

@@ -9,9 +9,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import com.rakuten.ecommerce.dao.CategoryDao;
+import com.rakuten.ecommerce.dao.ProductCategoryDao;
 import com.rakuten.ecommerce.dao.entities.Category;
 import com.rakuten.ecommerce.service.CategoryService;
 import com.rakuten.ecommerce.service.exception.DataNotFoundException;
@@ -28,6 +30,9 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Autowired
 	private CategoryDao categoryDao;
+
+	@Autowired
+	private ProductCategoryDao productCategoryDao;
 	
 	@Override
 	public CategoryForWeb getCategory(long categoryId) throws DataNotFoundException {
@@ -39,7 +44,7 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public long createCategory(CategoryFromWeb categoryFromWeb) throws InvalidClientRequestException {
+	public long createCategory(CategoryFromWeb categoryFromWeb) {
 		logger.info("Creating category with details: {}", categoryFromWeb);
 		Category category = new Category();
 		BeanUtils.copyProperties(categoryFromWeb, category);
@@ -53,6 +58,10 @@ public class CategoryServiceImpl implements CategoryService {
 	public void updateCategory(long categoryId, CategoryFromWeb categoryFromWeb) throws DataNotFoundException {
 		logger.info("Updating category with Id: {}", categoryId);
 		Category category = validateExistence(categoryId);
+		long parentCategoryId = categoryFromWeb.getParentCategoryId();
+		if(parentCategoryId != -1){
+			validateExistence(parentCategoryId);
+		}
 		BeanUtils.copyProperties(categoryFromWeb, category);
 		category.setLastModifiedAt(new Timestamp(System.currentTimeMillis()));
 		categoryDao.merge(category);
@@ -67,7 +76,7 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public List<CategoryForWeb> getCategories(List<Long> categoryIds) throws InvalidClientRequestException, DataNotFoundException {
+	public List<CategoryForWeb> getCategories(List<Long> categoryIds) throws DataNotFoundException {
 		logger.info("Fetching categories against Ids: {}", categoryIds);
 		List<Category> categories = categoryDao.getBy(categoryIds);
 		if(CollectionUtils.isEmpty(categories)){
@@ -82,11 +91,13 @@ public class CategoryServiceImpl implements CategoryService {
 		return categoriesForWeb;
 	}
 
+	@Transactional
 	@Override
 	public void deleteCategory(long categoryId) throws DataNotFoundException {
 		logger.info("Deleting category with Id: {}", categoryId);
 		Category category = validateExistence(categoryId);
 		categoryDao.remove(category);
+		productCategoryDao.removeByCategory(categoryId);
 	}
 
 	@Override

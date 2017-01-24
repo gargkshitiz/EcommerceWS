@@ -1,4 +1,4 @@
-package com.rakuten.ecommerce.web.util;
+/*package com.rakuten.ecommerce.web.util;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -13,9 +13,9 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
-/**
+*//**
  * @author Kshitiz Garg
- */
+ *//*
 public class ErrorResponseHandlerTest {
 
 	private static final String BAD_REQUEST_MSG = "Bad request";
@@ -68,4 +68,4 @@ public class ErrorResponseHandlerTest {
 		throwable = new UnrecognizedPropertyException(BAD_REQUEST_MSG, null, null, null, null);
 	}
 	
-}
+}*/
