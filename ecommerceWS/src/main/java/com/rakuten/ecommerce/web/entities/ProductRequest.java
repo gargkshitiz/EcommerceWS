@@ -34,7 +34,7 @@ public class ProductRequest {
 	}
 	public void setProductCurrency(String productCurrency) {
 		if(StringUtils.isEmpty(productCurrency)){
-			this.productCurrency = CurrencyConvertor.EUR;
+			this.productCurrency = CurrencyConvertor.EURO;
 		}
 		validate(productCurrency);
 		this.productCurrency = productCurrency;

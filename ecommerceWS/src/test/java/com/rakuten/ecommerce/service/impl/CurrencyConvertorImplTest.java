@@ -74,7 +74,7 @@ public class CurrencyConvertorImplTest {
 	@Test
 	public void getPriceWhenFromCurrencyIsEuro() throws ThirdPartyRequestFailedException, CurrencyNotSupportedException{
 		final BigDecimal toCurrencyExchangeRate =  BigDecimal.valueOf((double)rates.get(SGD));
-		Price price = convertorImpl.getPrice(THOUSAND, CurrencyConvertor.EUR, SGD);
+		Price price = convertorImpl.getPrice(THOUSAND, CurrencyConvertor.EURO, SGD);
 		final BigDecimal priceInToCurrency = new BigDecimal(THOUSAND).multiply(toCurrencyExchangeRate, MathContext.DECIMAL64).setScale(2, RoundingMode.CEILING);
 		Assert.assertEquals(THOUSAND, price.getPriceInEuro().toString());
 		Assert.assertEquals(priceInToCurrency, price.getPriceInDesiredCurrency());

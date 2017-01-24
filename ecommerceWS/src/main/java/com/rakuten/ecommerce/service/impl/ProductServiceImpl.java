@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -66,6 +67,9 @@ public class ProductServiceImpl implements ProductService {
 			}
 			productResponse.setCatgeories(categoryResponses);
 		}
+		if(StringUtils.isEmpty(desiredCurrency)){
+			desiredCurrency = CurrencyConvertor.EURO;
+		}
 		Price price = currencyConvertor.getPrice(product.getPrice(), product.getProductCurrency(), desiredCurrency);
 		productResponse.setPriceInEuro(price.getPriceInEuro());
 		productResponse.setPriceInDesiredCurrency(price.getPriceInDesiredCurrency());
@@ -77,8 +81,8 @@ public class ProductServiceImpl implements ProductService {
 	public long createProduct(ProductRequest productRequest) throws InvalidClientRequestException, ThirdPartyRequestFailedException, CurrencyNotSupportedException{
 		long currentTimeMillis = System.currentTimeMillis();
 		Product product = getProductEntity(productRequest);
-		Price price = currencyConvertor.getPrice(product.getPrice(), product.getProductCurrency(), CurrencyConvertor.EUR);
-		product.setProductCurrency(CurrencyConvertor.EUR);
+		Price price = currencyConvertor.getPrice(product.getPrice(), product.getProductCurrency(), CurrencyConvertor.EURO);
+		product.setProductCurrency(CurrencyConvertor.EURO);
 		product.setPrice(price.getPriceInEuro().toString());
 		product.setCreatedAt(new Timestamp(currentTimeMillis));
 		product.setLastModifiedAt(new Timestamp(currentTimeMillis));
@@ -131,8 +135,8 @@ public class ProductServiceImpl implements ProductService {
 		logger.info("Updating product with Id: {}", productId);
 		Product product = validateExistence(productId);
 		BeanUtils.copyProperties(productRequest, product);
-		Price price = currencyConvertor.getPrice(product.getPrice(), product.getProductCurrency(), CurrencyConvertor.EUR);
-		product.setProductCurrency(CurrencyConvertor.EUR);
+		Price price = currencyConvertor.getPrice(product.getPrice(), product.getProductCurrency(), CurrencyConvertor.EURO);
+		product.setProductCurrency(CurrencyConvertor.EURO);
 		product.setPrice(price.getPriceInEuro().toString());
 		product.setLastModifiedAt(new Timestamp(System.currentTimeMillis()));
 		productDao.merge(product);

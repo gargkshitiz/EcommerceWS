@@ -8,7 +8,7 @@ import com.rakuten.ecommerce.service.exception.ThirdPartyRequestFailedException;
  */
 public interface CurrencyConvertor {
 
-	public String EUR = "EUR";
+	public String EURO = "EUR";
 
 	Price getPrice(String price, String fromCurrency, String toCurrency) throws ThirdPartyRequestFailedException, CurrencyNotSupportedException;
 

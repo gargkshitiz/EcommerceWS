@@ -34,8 +34,8 @@ public class CurrencyConvertorImpl implements CurrencyConvertor {
 		if(StringUtils.isEmpty(fromCurrency)|| StringUtils.isEmpty(toCurrency)){
 			throw new IllegalArgumentException("Currency symbol should not be null or empty");
 		}
-		final boolean fromCurrencyIsEuro = CurrencyConvertor.EUR.equalsIgnoreCase(fromCurrency);
-		final boolean toCurrencyIsEuro = CurrencyConvertor.EUR.equalsIgnoreCase(toCurrency);
+		final boolean fromCurrencyIsEuro = CurrencyConvertor.EURO.equalsIgnoreCase(fromCurrency);
+		final boolean toCurrencyIsEuro = CurrencyConvertor.EURO.equalsIgnoreCase(toCurrency);
 		if(fromCurrencyIsEuro && toCurrencyIsEuro){
 			return new Price(new BigDecimal(price), new BigDecimal(price));
 		}
@@ -74,7 +74,7 @@ public class CurrencyConvertorImpl implements CurrencyConvertor {
 	}
 
 	private void checkCurrencySupport(Map<Object, Object> rates, String currency) throws CurrencyNotSupportedException {
-		if(!CurrencyConvertor.EUR.equalsIgnoreCase(currency) && !rates.keySet().contains(currency)){
+		if(!CurrencyConvertor.EURO.equalsIgnoreCase(currency) && !rates.keySet().contains(currency)){
 			throw new CurrencyNotSupportedException(currency.concat(" is not supported by ").concat(fixerBaseUri));
 		}
 	}
