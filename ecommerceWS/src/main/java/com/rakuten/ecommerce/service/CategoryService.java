@@ -12,14 +12,16 @@ import com.rakuten.ecommerce.web.entities.CategoryFromWeb;
  */
 public interface CategoryService {
 
-	CategoryForWeb get(long categoryId) throws InvalidClientRequestException, DataNotFoundException;
+	CategoryForWeb getCategory(long categoryId) throws DataNotFoundException;
 
 	long createCategory(CategoryFromWeb categoryDetails) throws InvalidClientRequestException;
 
-	List<CategoryForWeb> get(List<Long> categoryIds) throws InvalidClientRequestException, DataNotFoundException;
+	List<CategoryForWeb> getCategories(List<Long> categoryIds) throws InvalidClientRequestException, DataNotFoundException;
 
-	void updateCategory(long categoryId, CategoryFromWeb categoryFromWeb) throws InvalidClientRequestException;
+	void updateCategory(long categoryId, CategoryFromWeb categoryFromWeb) throws DataNotFoundException;
 
-	void delete(long categoryId) throws DataNotFoundException;
+	void deleteCategory(long categoryId) throws DataNotFoundException;
+	
+	void patchCategory(long categoryId, CategoryFromWeb categoryFromWeb) throws DataNotFoundException;
 
 }

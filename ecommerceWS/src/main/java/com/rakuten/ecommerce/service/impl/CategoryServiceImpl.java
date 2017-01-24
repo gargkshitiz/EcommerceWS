@@ -30,12 +30,9 @@ public class CategoryServiceImpl implements CategoryService {
 	private CategoryDao categoryDao;
 	
 	@Override
-	public CategoryForWeb get(long categoryId) throws InvalidClientRequestException, DataNotFoundException {
+	public CategoryForWeb getCategory(long categoryId) throws DataNotFoundException {
 		logger.info("Fetching category by Id: {}", categoryId);
-		Category category = categoryDao.getBy(categoryId);
-		if(category==null){
-			throw new DataNotFoundException("No category exist against Id: "+ categoryId);
-		}
+		Category category = validateExistence(categoryId);
 		CategoryForWeb categoryForWeb = new CategoryForWeb();
 		BeanUtils.copyProperties(category, categoryForWeb);
 		return categoryForWeb;
@@ -53,18 +50,25 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 	
 	@Override
-	public void updateCategory(long categoryId, CategoryFromWeb categoryFromWeb) throws InvalidClientRequestException {
+	public void updateCategory(long categoryId, CategoryFromWeb categoryFromWeb) throws DataNotFoundException {
 		logger.info("Updating category with Id: {}", categoryId);
-		Category category = new Category();
+		Category category = validateExistence(categoryId);
 		BeanUtils.copyProperties(categoryFromWeb, category);
-		category.setCategoryId(categoryId);
 		category.setLastModifiedAt(new Timestamp(System.currentTimeMillis()));
 		categoryDao.merge(category);
 	}
 
+	private Category validateExistence(long categoryId) throws DataNotFoundException {
+		Category category = categoryDao.getBy(categoryId);
+		if(category==null){
+			throw new DataNotFoundException("No category exists against Id: "+ categoryId);
+		}
+		return category;
+	}
+
 	@Override
-	public List<CategoryForWeb> get(List<Long> categoryIds) throws InvalidClientRequestException, DataNotFoundException {
-		logger.info("Fetching categories by Ids: {}", categoryIds);
+	public List<CategoryForWeb> getCategories(List<Long> categoryIds) throws InvalidClientRequestException, DataNotFoundException {
+		logger.info("Fetching categories against Ids: {}", categoryIds);
 		List<Category> categories = categoryDao.getBy(categoryIds);
 		if(CollectionUtils.isEmpty(categories)){
 			throw new DataNotFoundException("No categories exist against Ids: "+ categoryIds);
@@ -79,9 +83,17 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public void delete(long categoryId) throws DataNotFoundException {
-		Category c = new Category();
-		// TODO: delete all refs
+	public void deleteCategory(long categoryId) throws DataNotFoundException {
+		logger.info("Deleting category with Id: {}", categoryId);
+		Category category = validateExistence(categoryId);
+		categoryDao.remove(category);
+	}
+
+	@Override
+	public void patchCategory(long categoryId, CategoryFromWeb categoryFromWeb) throws DataNotFoundException {
+		logger.info("Patching category with Id: {}", categoryId);
+		Category category = validateExistence(categoryId);
+		// TODO Auto-generated method stub
 	}
 
 }

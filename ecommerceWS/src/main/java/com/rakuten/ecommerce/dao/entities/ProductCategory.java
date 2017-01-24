@@ -18,20 +18,23 @@ public class ProductCategory {
 	@Column(name = Category.CATEGORY_ID_COL, unique = true, nullable = false)
 	private long categoryId;
 
+
+	public ProductCategory() {
+		// For JPA
+	}
+
+	
+	public ProductCategory(long productId, long categoryId) {
+		this.productId = productId;
+		this.categoryId = categoryId;
+	}
+
 	public long getProductId() {
 		return productId;
 	}
 
-	public void setProductId(long productId) {
-		this.productId = productId;
-	}
-
 	public long getCategoryId() {
 		return categoryId;
-	}
-
-	public void setCategoryId(long categoryId) {
-		this.categoryId = categoryId;
 	}
 
 }

@@ -13,9 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import com.rakuten.ecommerce.dao.CategoryDao;
+import com.rakuten.ecommerce.dao.ProductCategoryDao;
 import com.rakuten.ecommerce.dao.ProductDao;
 import com.rakuten.ecommerce.dao.entities.Category;
 import com.rakuten.ecommerce.dao.entities.Product;
+import com.rakuten.ecommerce.dao.entities.ProductCategory;
 import com.rakuten.ecommerce.service.CurrencyConvertor;
 import com.rakuten.ecommerce.service.ProductService;
 import com.rakuten.ecommerce.service.entities.Price;
@@ -26,7 +28,6 @@ import com.rakuten.ecommerce.service.exception.ThirdPartyRequestFailedException;
 import com.rakuten.ecommerce.web.entities.CategoryForWeb;
 import com.rakuten.ecommerce.web.entities.ProductForWeb;
 import com.rakuten.ecommerce.web.entities.ProductFromWeb;
-import com.rakuten.ecommerce.web.entities.ProductsFromWeb;
 /**
  * @author Kshitiz Garg
  */
@@ -39,7 +40,7 @@ public class ProductServiceImpl implements ProductService {
 	private ProductDao productDao;
 	
 	@Autowired
-	private CategoryDao categoryDao;
+	private ProductCategoryDao productCategoryDao;
 	
 	@Autowired
 	private CurrencyConvertor currencyConvertor;
@@ -69,33 +70,67 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public long createProduct(ProductFromWeb productDetails) throws InvalidClientRequestException, ThirdPartyRequestFailedException, CurrencyNotSupportedException{
+		long currentTimeMillis = System.currentTimeMillis();
 		Product product = getProductEntity(productDetails);
 		Price price = currencyConvertor.getPrice(product.getPrice(), product.getProductCurrency(), CurrencyConvertor.EUR);
 		product.setProductCurrency(CurrencyConvertor.EUR);
 		product.setPrice(price.getPriceInEuro().toString());
-		long currentTimeMillis = System.currentTimeMillis();
 		product.setCreatedAt(new Timestamp(currentTimeMillis));
 		product.setLastModifiedAt(new Timestamp(currentTimeMillis));
-		return productDao.persist(product).getProductId();
+		productDao.persist(product);
+		List<String> categoryIds = productDetails.getCatgeoryIds();
+		if(!CollectionUtils.isEmpty(categoryIds)){
+			for(String categoryId: categoryIds){
+				long catgeory;
+				try{
+					catgeory = Long.parseLong(categoryId);
+				}
+				catch(Exception e){
+					throw new InvalidClientRequestException("CategoryIds should be valid (if present)");
+				}
+				ProductCategory pc = new ProductCategory(product.getProductId(), catgeory);
+				productCategoryDao.persist(pc);
+			}
+		}
+		return product.getProductId();
 	}
 
 	private Product getProductEntity(ProductFromWeb productDetails) {
 		Product product = new Product();
 		BeanUtils.copyProperties(productDetails, product);
-		List<Long> categoryIds = productDetails.getCatgeoryIds();
-		if(!CollectionUtils.isEmpty(categoryIds)){
-			List<Category> categories = categoryDao.getBy(categoryIds);
-			product.setCatgeories(new HashSet<Category>(categories));
+		return product;
+	}
+
+	@Override
+	public void updateProduct(long productId, ProductFromWeb productFromWeb) throws DataNotFoundException {
+		logger.info("Updating product with Id: {}", productId);
+		Product product = validateExistence(productId);
+		BeanUtils.copyProperties(productFromWeb, product);
+		product.setLastModifiedAt(new Timestamp(System.currentTimeMillis()));
+		productDao.merge(product);
+		
+	}
+
+	@Override
+	public void deleteProduct(long productId) throws DataNotFoundException {
+		logger.info("Deleting product with Id: {}", productId);
+		Product product = validateExistence(productId);
+		productDao.remove(product);
+	}
+
+	private Product validateExistence(long productId) throws DataNotFoundException {
+		Product product = productDao.getProduct(productId);
+		if(product==null){
+			throw new DataNotFoundException("No product exists against Id: "+ productId);
 		}
 		return product;
 	}
 
 	@Override
-	public void createProducts(ProductsFromWeb products) throws InvalidClientRequestException, ThirdPartyRequestFailedException, CurrencyNotSupportedException {
-		for(ProductFromWeb p: products.getProducts()){
-			createProduct(p);
-		}
-		// TODO: Batch error handling
+	public void patchProduct(long productId) throws DataNotFoundException {
+		logger.info("Patching product with Id: {}", productId);
+		Product product = validateExistence(productId);
+		// TODO
 	}
 
 }

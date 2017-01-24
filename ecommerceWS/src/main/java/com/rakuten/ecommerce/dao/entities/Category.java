@@ -59,6 +59,7 @@ public class Category {
 	/*
 	 * parentCategoryId field is for future.
 	 * It can help to retrieve full category hierarchy
+	 * and show that with a product
 	 */
 	@Access(AccessType.FIELD)
 	@Column(name = "ParentCategoryId", nullable = false)

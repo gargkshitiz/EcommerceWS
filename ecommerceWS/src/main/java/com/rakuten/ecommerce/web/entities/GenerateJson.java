@@ -21,9 +21,9 @@ public class GenerateJson {
 		p.setProductDesc("Pamper Active Baby Diaper");
 		p.setProductType("Diaper");
 		p.setUnitsInStock(2);
-		List<Long> cList = new ArrayList<>();
-		cList.add(1l);
-		cList.add(2l);
+		List<String> cList = new ArrayList<>();
+		cList.add("1");
+		cList.add("2");
 		p.setCatgeoryIds(cList);
 		System.out.println(new Gson().toJson(p));
 	}

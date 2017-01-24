@@ -42,4 +42,14 @@ public class ProductDao {
 		}
 	}
 
+	@Transactional
+	public void merge(Product product) {
+		entityManager.merge(product);
+	}
+
+	@Transactional
+	public void remove(Product product) {
+		entityManager.remove(product);
+	}
+
 }

@@ -68,4 +68,5 @@ public class ProductsResource {
 		}
     }
 
+	// TODO GET with offset
 }

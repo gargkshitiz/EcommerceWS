@@ -33,7 +33,9 @@ public interface ApiDocumentationConstants {
 	String PRODUCT_PUT_NOTES = "Provide all info required from the point of view of modal popup(s) at page publishing time, within request body. It persists all modal popup(s) and corresponding condition(s) associated with the published page";
 	String PRODUCT_DELETE = "Deletes modal pop up, its conditions and all its counts from this system";
 	String PRODUCT_DELETE_NOTES = "Deletes modal pop up, its conditions and all its counts from personalizatioWS. All history for the modal pop would also be wiped off with this call";
-
+	String PRODUCT_PATCH = "Deletes modal pop up, its conditions and all its counts from this system";
+	String PRODUCT_PATCH_NOTES = "Deletes modal pop up, its conditions and all its counts from personalizatioWS. All history for the modal pop would also be wiped off with this call";
+	
 	String PRODUCTS = "products";
 	String PRODUCTS_API = "/"+PRODUCTS;
 	String PRODUCTS_API_DESC = "Use this API to submit a user activity or reset isShown flags associated with modal popup and user activities";
@@ -41,8 +43,6 @@ public interface ApiDocumentationConstants {
 	String PRODUCTS_POST_NOTES = "This API is used for recording user activities, for e.g. to update the latest page view count for a user";
 	String PRODUCTS_GET = "POSTs a user activity in personalizationWS";
 	String PRODUCTS_GET_NOTES = "This API is used for recording user activities, for e.g. to update the latest page view count for a user";
-	String PRODUCTS_PUT = "Persists all modal popup(s) and corresponding condition(s) associated with the published page";
-	String PRODUCTS_PUT_NOTES = "Provide all info required from the point of view of modal popup(s) at page publishing time, within request body. It persists all modal popup(s) and corresponding condition(s) associated with the published page";
 	
 	String CATEGORY = "category";
 	String CATEGORY_API = "/"+CATEGORY;
@@ -53,6 +53,8 @@ public interface ApiDocumentationConstants {
 	String CATEGORY_GET_NOTES = "Provide basic info like page path, user role, access type etc in request body and this API would fetch modal pop ups(s) fulfiling the configured condition(s)";
 	String CATEGORY_PUT = "Persists all modal popup(s) and corresponding condition(s) associated with the published page";
 	String CATEGORY_PUT_NOTES = "Provide all info required from the point of view of modal popup(s) at page publishing time, within request body. It persists all modal popup(s) and corresponding condition(s) associated with the published page";
+	String CATEGORY_PATCH = "Persists all modal popup(s) and corresponding condition(s) associated with the published page";
+	String CATEGORY_PATCH_NOTES = "Provide all info required from the point of view of modal popup(s) at page publishing time, within request body. It persists all modal popup(s) and corresponding condition(s) associated with the published page";
 	String CATEGORY_DELETE = "Deletes modal pop up, its conditions and all its counts from this system";
 	String CATEGORY_DELETE_NOTES = "Deletes modal pop up, its conditions and all its counts from personalizatioWS. All history for the modal pop would also be wiped off with this call";
 	
@@ -61,7 +63,7 @@ public interface ApiDocumentationConstants {
 	String CATEGORIES_API_DESCRIPTION = "This API is used for modal pop(s). Use POST for fetching modal pop ups(s) fulfiling the configured condition(s). Creation (PUT) and deletion (DELETE) of modal pop up(s) are also possible";
 	String CATEGORIES_POST = "Fetches modal pop ups(s) fulfiling the configured condition(s)";
 	String CATEGORIES_POST_NOTES = "Provide basic info like page path, user role, access type etc in request body and this API would fetch modal pop ups(s) fulfiling the configured condition(s)";
-	String CATEGORIES_PUT = "Persists all modal popup(s) and corresponding condition(s) associated with the published page";
-	String CATEGORIES_PUT_NOTES = "Provide all info required from the point of view of modal popup(s) at page publishing time, within request body. It persists all modal popup(s) and corresponding condition(s) associated with the published page";
+	String CATEGORIES_GET = "Persists all modal popup(s) and corresponding condition(s) associated with the published page";
+	String CATEGORIES_GET_NOTES = "Provide all info required from the point of view of modal popup(s) at page publishing time, within request body. It persists all modal popup(s) and corresponding condition(s) associated with the published page";
 
 }

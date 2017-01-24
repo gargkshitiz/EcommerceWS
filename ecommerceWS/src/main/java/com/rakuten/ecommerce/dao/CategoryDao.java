@@ -67,4 +67,5 @@ public class CategoryDao {
 	public void remove(Category category) {
 		entityManager.remove(category);
 	}
+
 }

@@ -1,7 +1,9 @@
 package com.rakuten.ecommerce.dao.entities;
 
 import java.io.Serializable;
-
+/**
+ * @author Kshitiz Garg
+ */
 public class ProductCategoryId implements Serializable{
 	
 	/**
@@ -27,6 +29,31 @@ public class ProductCategoryId implements Serializable{
 
 	public void setCategoryId(long categoryId) {
 		this.categoryId = categoryId;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (categoryId ^ (categoryId >>> 32));
+		result = prime * result + (int) (productId ^ (productId >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ProductCategoryId other = (ProductCategoryId) obj;
+		if (categoryId != other.categoryId)
+			return false;
+		if (productId != other.productId)
+			return false;
+		return true;
 	}
 
 }

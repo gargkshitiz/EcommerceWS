@@ -18,7 +18,7 @@ public class ProductFromWeb {
 	private String productDesc;
 	private String productCurrency;
 	private String price;
-    private List<Long> catgeoryIds;
+    private List<String> catgeoryIds;
 	private long unitsInStock;
     private String productCode;
     private String productType;
@@ -68,10 +68,10 @@ public class ProductFromWeb {
 	public void setProductType(String productType) {
 		this.productType = productType;
 	}
-	public List<Long> getCatgeoryIds() {
+	public List<String> getCatgeoryIds() {
 		return catgeoryIds;
 	}
-	public void setCatgeoryIds(List<Long> catgeoryIds) {
+	public void setCatgeoryIds(List<String> catgeoryIds) {
 		this.catgeoryIds = catgeoryIds;
 	}
 	

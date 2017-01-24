@@ -62,8 +62,8 @@ public class CurrencyConvertorImplTest {
 	
 	@Test
 	public void getPrice() throws ThirdPartyRequestFailedException, CurrencyNotSupportedException{
-		final BigDecimal fromCurrencyExchangeRate =  new BigDecimal((String)rates.get(INR));
-		final BigDecimal toCurrencyExchangeRate =  new BigDecimal((String)rates.get(SGD));
+		final BigDecimal fromCurrencyExchangeRate =  BigDecimal.valueOf((double)rates.get(INR));
+		final BigDecimal toCurrencyExchangeRate =  BigDecimal.valueOf((double)rates.get(SGD));
 		final BigDecimal priceInEuro = new BigDecimal(THOUSAND).divide(fromCurrencyExchangeRate, 2, RoundingMode.HALF_UP);
 		final BigDecimal priceInToCurrency = priceInEuro.multiply(toCurrencyExchangeRate, MathContext.DECIMAL64).setScale(2, RoundingMode.CEILING);
 		Price price = convertorImpl.getPrice(THOUSAND, INR, SGD);
@@ -73,10 +73,10 @@ public class CurrencyConvertorImplTest {
 
 	@Test
 	public void getPriceWhenFromCurrencyIsEuro() throws ThirdPartyRequestFailedException, CurrencyNotSupportedException{
-		final BigDecimal toCurrencyExchangeRate =  new BigDecimal((String)rates.get(SGD));
+		final BigDecimal toCurrencyExchangeRate =  BigDecimal.valueOf((double)rates.get(SGD));
 		Price price = convertorImpl.getPrice(THOUSAND, CurrencyConvertor.EUR, SGD);
 		final BigDecimal priceInToCurrency = new BigDecimal(THOUSAND).multiply(toCurrencyExchangeRate, MathContext.DECIMAL64).setScale(2, RoundingMode.CEILING);
-		Assert.assertEquals(THOUSAND, price.getPriceInEuro());
+		Assert.assertEquals(THOUSAND, price.getPriceInEuro().toString());
 		Assert.assertEquals(priceInToCurrency, price.getPriceInDesiredCurrency());
 	}
 	
