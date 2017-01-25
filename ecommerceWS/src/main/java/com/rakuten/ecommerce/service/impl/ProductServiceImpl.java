@@ -1,5 +1,6 @@
 package com.rakuten.ecommerce.service.impl;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -27,6 +29,7 @@ import com.rakuten.ecommerce.service.exception.CurrencyNotSupportedException;
 import com.rakuten.ecommerce.service.exception.DataNotFoundException;
 import com.rakuten.ecommerce.service.exception.InvalidClientRequestException;
 import com.rakuten.ecommerce.service.exception.ThirdPartyRequestFailedException;
+import com.rakuten.ecommerce.web.entities.BulkProductResponse;
 import com.rakuten.ecommerce.web.entities.CategoryResponse;
 import com.rakuten.ecommerce.web.entities.ProductResponse;
 import com.rakuten.ecommerce.web.entities.ProductRequest;
@@ -38,6 +41,9 @@ public class ProductServiceImpl implements ProductService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
 
+	@Value("${bulk-get-results-limit}")
+	private long bulkGetResultsLimit;
+	
 	@Autowired
 	private ProductDao productDao;
 	
@@ -55,6 +61,10 @@ public class ProductServiceImpl implements ProductService {
 	public ProductResponse getProductWithCategories(long productId, String desiredCurrency) throws DataNotFoundException, ThirdPartyRequestFailedException, CurrencyNotSupportedException {
 		logger.info("Fetching product by Id: {}", productId);
 		Product product = validateExistence(productId);
+		return prepareProductResponse(desiredCurrency, product);
+	}
+
+	private ProductResponse prepareProductResponse(String desiredCurrency, Product product)	throws ThirdPartyRequestFailedException, CurrencyNotSupportedException {
 		ProductResponse productResponse = new ProductResponse();
 		BeanUtils.copyProperties(product, productResponse);
 		Set<CategoryResponse> categoryResponses ;
@@ -145,6 +155,34 @@ public class ProductServiceImpl implements ProductService {
 			productCategoryDao.removeByProduct(productId);
 		}
 		persistProductCategoryMappings(product, categoryIds);
+	}
+	
+	@Transactional
+	@Override
+	public BulkProductResponse getProducts(long startingProductId, String desiredCurrency) throws DataNotFoundException, ThirdPartyRequestFailedException, CurrencyNotSupportedException, InvalidClientRequestException {
+		if(startingProductId<=0){
+			throw new InvalidClientRequestException("startingProductId should be a positive integer");
+		}
+		logger.info("Fetching products starting with Id: {}", startingProductId);
+		List<Product> products = productDao.getBetween(startingProductId, startingProductId+bulkGetResultsLimit);
+		if(CollectionUtils.isEmpty(products)){
+			throw new DataNotFoundException("No products exist until Id: {}"+ startingProductId);
+		}
+		List<ProductResponse> productResponses = new ArrayList<>();
+		int batchSize = 0;
+		while(batchSize < products.size() && batchSize < bulkGetResultsLimit){
+			ProductResponse productResponse = prepareProductResponse(desiredCurrency, products.get(batchSize));
+			productResponses.add(productResponse);
+			batchSize++;
+		}
+		BulkProductResponse bulkProductResponse = new BulkProductResponse();
+		if(products.size()>bulkGetResultsLimit){
+			bulkProductResponse.setHasMore(true);
+			bulkProductResponse.setNextProductId(startingProductId+bulkGetResultsLimit);
+		}
+		bulkProductResponse.setCount(productResponses.size());
+		bulkProductResponse.setItems(productResponses);
+		return bulkProductResponse;
 	}
 
 }

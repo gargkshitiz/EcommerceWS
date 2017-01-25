@@ -37,6 +37,9 @@ public interface ApiDocumentationConstants {
 	String PRODUCTS_POST = "Creates a new product in  ecommerceWS";
 	String PRODUCTS_POST_NOTES = "Input catgeoryIds could be valid category id(s) OR absent (no category for product at the moment). Check 'location' header for the create productId";
 	
+	String PRODUCTS_GET = "Fetches products from ecommerceWS";
+	String PRODUCTS_GET_NOTES = "Results are fetched up to a pre-defined limit starting from startingProductId (inclusive). In the response, if hasMore is false and nextProductId is -1, that means no further data is available. If hasMore is true, then there would be as many items as the count attribute. Client could then send nextProductId (as received in the previous response) as the startingProductId as a query parameter to fetch further results";
+	
 	String CATEGORY = "category";
 	String CATEGORY_API = "/"+CATEGORY;
 	String CATEGORY_API_DESCRIPTION = "API to fetch, update or delete a category";
@@ -52,5 +55,8 @@ public interface ApiDocumentationConstants {
 	String CATEGORIES_API_DESCRIPTION = "This API is used for modal pop(s). Use POST for fetching modal pop ups(s) fulfiling the configured condition(s). Creation (PUT) and deletion (DELETE) of modal pop up(s) are also possible";
 	String CATEGORIES_POST = "Creates a new category in  ecommerceWS";
 	String CATEGORIES_POST_NOTES = "From the request, parent category Id could be absent (no parent) OR -1 (no parent) or a valid category id (valid parent)";
+
+	String CATEGORIES_GET = "Fetches categories from ecommerceWS";
+	String CATEGORIES_GET_NOTES = "Results are fetched up to a pre-defined limit starting from startingCategoryId (inclusive). In the response, if hasMore is false and nextCategoryId is -1, that means no further data is available. If hasMore is true, then there would be as many items as the count attribute. Client could then send nextCategoryId (as received in the previous response) as the startingCategoryId as a query parameter to fetch further results";
 
 }

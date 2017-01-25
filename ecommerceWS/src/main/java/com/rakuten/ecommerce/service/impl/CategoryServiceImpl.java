@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -19,6 +20,7 @@ import com.rakuten.ecommerce.service.CategoryService;
 import com.rakuten.ecommerce.service.exception.DataNotFoundException;
 import com.rakuten.ecommerce.service.exception.InvalidClientRequestException;
 import com.rakuten.ecommerce.web.entities.CategoryResponse;
+import com.rakuten.ecommerce.web.entities.BulkCategoryResponse;
 import com.rakuten.ecommerce.web.entities.CategoryRequest;
 /**
  * @author Kshitiz Garg
@@ -28,6 +30,9 @@ public class CategoryServiceImpl implements CategoryService {
 
 	private static final Logger logger = LoggerFactory.getLogger(CategoryServiceImpl.class);
 
+	@Value("${bulk-get-results-limit}")
+	private long bulkGetResultsLimit;
+	
 	@Autowired
 	private CategoryDao categoryDao;
 
@@ -79,19 +84,31 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public List<CategoryResponse> getCategories(List<Long> categoryIds) throws DataNotFoundException {
-		logger.info("Fetching categories against Ids: {}", categoryIds);
-		List<Category> categories = categoryDao.getBy(categoryIds);
+	public BulkCategoryResponse getCategories(long startingCategoryId) throws DataNotFoundException, InvalidClientRequestException {
+		if(startingCategoryId<=0){
+			throw new InvalidClientRequestException("startingCategoryId should be a positive integer");
+		}
+		logger.info("Fetching categories starting with Id: {}", startingCategoryId);
+		List<Category> categories = categoryDao.getBetween(startingCategoryId, startingCategoryId+bulkGetResultsLimit);
 		if(CollectionUtils.isEmpty(categories)){
-			throw new DataNotFoundException("No categories exist against Ids: "+ categoryIds);
+			throw new DataNotFoundException("No categories exist until Id: {}"+ startingCategoryId);
 		}
 		List<CategoryResponse> categoryResponses = new ArrayList<>();
-		for(Category c: categories){
+		int batchSize = 0;
+		while(batchSize < categories.size() && batchSize < bulkGetResultsLimit){
 			CategoryResponse cfw = new CategoryResponse();
-			BeanUtils.copyProperties(c, cfw);
+			BeanUtils.copyProperties(categories.get(batchSize), cfw);
 			categoryResponses.add(cfw);
+			batchSize++;
 		}
-		return categoryResponses;
+		BulkCategoryResponse bulkCategoryResponse = new BulkCategoryResponse();
+		if(categories.size()>bulkGetResultsLimit){
+			bulkCategoryResponse.setHasMore(true);
+			bulkCategoryResponse.setNextCategoryId(startingCategoryId+bulkGetResultsLimit);
+		}
+		bulkCategoryResponse.setCount(categoryResponses.size());
+		bulkCategoryResponse.setItems(categoryResponses);
+		return bulkCategoryResponse;
 	}
 
 	@Transactional
@@ -101,6 +118,10 @@ public class CategoryServiceImpl implements CategoryService {
 		Category category = validateExistence(categoryId);
 		categoryDao.remove(category);
 		productCategoryDao.removeByCategory(categoryId);
+	}
+
+	public long getBulkGetResultsLimit() {
+		return bulkGetResultsLimit;
 	}
 
 }

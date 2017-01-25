@@ -22,7 +22,8 @@ import com.rakuten.ecommerce.dao.CategoryDao;
 @Entity
 @NamedQueries({
 	@NamedQuery(name=CategoryDao.FETCH_CATEGORY_BY_ID, query="SELECT c FROM Category c where c.categoryId = :" + Category.CATEGORY_ID),
-	@NamedQuery(name=CategoryDao.FETCH_CATEGORIES_BY_IDS, query="SELECT c FROM Category c where c.categoryId in :" + Category.CATEGORY_IDS)
+	@NamedQuery(name=CategoryDao.FETCH_CATEGORIES_BY_IDS, query="SELECT c FROM Category c where c.categoryId in :" + Category.CATEGORY_IDS),
+	@NamedQuery(name=CategoryDao.FETCH_CATEGORIES_BETWEEN_IDS, query="SELECT c FROM Category c where c.categoryId >= :" + Category.START +" and c.categoryId <= :"+ Category.END)
 })
 @Table(name="Category")
 /**
@@ -37,6 +38,10 @@ public class Category {
 	public static final String CATEGORY_ID = "categoryId";
 	
 	public static final String CATEGORY_IDS = "categoryIds";
+
+	public static final String START = "start";
+	
+	public static final String END = "end";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

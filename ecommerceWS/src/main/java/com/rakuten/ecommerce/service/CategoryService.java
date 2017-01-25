@@ -1,11 +1,10 @@
 package com.rakuten.ecommerce.service;
 
-import java.util.List;
-
 import com.rakuten.ecommerce.service.exception.DataNotFoundException;
 import com.rakuten.ecommerce.service.exception.InvalidClientRequestException;
-import com.rakuten.ecommerce.web.entities.CategoryResponse;
+import com.rakuten.ecommerce.web.entities.BulkCategoryResponse;
 import com.rakuten.ecommerce.web.entities.CategoryRequest;
+import com.rakuten.ecommerce.web.entities.CategoryResponse;
 
 /**
  * @author Kshitiz Garg
@@ -20,6 +19,6 @@ public interface CategoryService {
 
 	void deleteCategory(long categoryId) throws DataNotFoundException;
 	
-	List<CategoryResponse> getCategories(List<Long> categoryIds) throws DataNotFoundException;
+	BulkCategoryResponse getCategories(long startingCategoryId)throws DataNotFoundException, InvalidClientRequestException;
 
 }

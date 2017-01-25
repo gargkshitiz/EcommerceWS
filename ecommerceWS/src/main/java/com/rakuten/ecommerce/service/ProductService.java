@@ -5,6 +5,7 @@ import com.rakuten.ecommerce.service.exception.DataNotFoundException;
 import com.rakuten.ecommerce.service.exception.InvalidClientRequestException;
 import com.rakuten.ecommerce.service.exception.ThirdPartyRequestFailedException;
 import com.rakuten.ecommerce.web.entities.ProductResponse;
+import com.rakuten.ecommerce.web.entities.BulkProductResponse;
 import com.rakuten.ecommerce.web.entities.ProductRequest;
 
 /**
@@ -19,5 +20,7 @@ public interface ProductService {
 	void deleteProduct(long productId) throws DataNotFoundException;
 
 	void updateProduct(long productId, ProductRequest productRequest) throws DataNotFoundException, InvalidClientRequestException, ThirdPartyRequestFailedException, CurrencyNotSupportedException;
+
+	BulkProductResponse getProducts(long startingProductId, String desiredCurrency) throws DataNotFoundException, ThirdPartyRequestFailedException, CurrencyNotSupportedException, InvalidClientRequestException;
 
 }

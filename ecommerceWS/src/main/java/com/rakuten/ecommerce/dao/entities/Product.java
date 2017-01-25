@@ -24,7 +24,8 @@ import com.rakuten.ecommerce.dao.ProductDao;
  */
 @Entity
 @NamedQueries({
-	@NamedQuery(name=ProductDao.FETCH_PRODUCT_BY_ID, query="SELECT p FROM Product p where p.productId = :" + Product.PRODUCT_ID)
+	@NamedQuery(name=ProductDao.FETCH_PRODUCT_BY_ID, query="SELECT p FROM Product p where p.productId = :" + Product.PRODUCT_ID),
+	@NamedQuery(name=ProductDao.FETCH_PRODUCTS_BETWEEN_IDS, query="SELECT p FROM Product p where p.productId >= :" + Product.START +" and p.productId <= :"+ Product.END)
 })
 @Table(name="Product")
 
@@ -34,6 +35,10 @@ public class Product {
 	
 	public static final String PRODUCT_ID = "productId";
 
+	public static final String START = "start";
+	
+	public static final String END = "end";
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = PRODUCT_ID_COL, unique = true, nullable = false)

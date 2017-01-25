@@ -22,6 +22,7 @@ public class CategoryDao {
 	
 	public static final String FETCH_CATEGORY_BY_ID = "fetchCategoryById";
 	public static final String FETCH_CATEGORIES_BY_IDS = "fetchCategoriesByIds";
+	public static final String FETCH_CATEGORIES_BETWEEN_IDS = "fetchCategoriesBetweenIds";
 	
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -66,6 +67,20 @@ public class CategoryDao {
 	@Transactional
 	public void remove(Category category) {
 		entityManager.remove(category);
+	}
+
+	public List<Category> getBetween(long start, long end) {
+		Query query = entityManager.createNamedQuery(FETCH_CATEGORIES_BETWEEN_IDS);
+		try{
+			return (List<Category>)query.setParameter(Category.START, start).
+					setParameter(Category.END, end).getResultList();
+		}
+		catch(NoResultException e){
+			/*We can't rethrow this exception, as that would be an 
+			indicator to Spring-retry module and that will retry 
+			unnecessarily*/
+			return null;
+		}
 	}
 
 }

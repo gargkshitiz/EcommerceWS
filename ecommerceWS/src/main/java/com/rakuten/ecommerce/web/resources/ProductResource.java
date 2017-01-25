@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rakuten.ecommerce.service.ProductService;
 import com.rakuten.ecommerce.service.exception.CurrencyNotSupportedException;
 import com.rakuten.ecommerce.service.exception.DataNotFoundException;
+import com.rakuten.ecommerce.service.exception.InvalidClientRequestException;
 import com.rakuten.ecommerce.service.exception.ThirdPartyRequestFailedException;
 import com.rakuten.ecommerce.web.entities.ProductRequest;
 import com.rakuten.ecommerce.web.swagger.ApiDocumentationConstants;
@@ -125,6 +126,10 @@ public class ProductResource {
 			logger.error(e.getMessage());
 			return new ResponseEntity<>(e.getHttpStatusCode());
 		} 
+		catch (InvalidClientRequestException e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<>(e.getMessage(), e.getHttpStatusCode());
+		}
 		catch (ThirdPartyRequestFailedException e) {
 			logger.error(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);

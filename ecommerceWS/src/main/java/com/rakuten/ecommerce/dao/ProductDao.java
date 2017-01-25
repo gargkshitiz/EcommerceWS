@@ -1,5 +1,7 @@
 package com.rakuten.ecommerce.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -20,6 +22,8 @@ public class ProductDao {
 	
 	public static final String FETCH_PRODUCT_BY_ID = "fetchProductById";
 
+	public static final String FETCH_PRODUCTS_BETWEEN_IDS = "fetchProductsBetweenIds";
+	
 	@PersistenceContext
 	private EntityManager entityManager;
 	
@@ -52,4 +56,17 @@ public class ProductDao {
 		entityManager.remove(product);
 	}
 
+	public List<Product> getBetween(long start, long end) {
+		Query query = entityManager.createNamedQuery(FETCH_PRODUCTS_BETWEEN_IDS);
+		try{
+			return (List<Product>)query.setParameter(Product.START, start).
+					setParameter(Product.END, end).getResultList();
+		}
+		catch(NoResultException e){
+			/*We can't rethrow this exception, as that would be an 
+			indicator to Spring-retry module and that will retry 
+			unnecessarily*/
+			return null;
+		}
+	}
 }
