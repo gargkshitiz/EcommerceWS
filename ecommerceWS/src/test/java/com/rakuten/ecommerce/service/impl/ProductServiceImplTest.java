@@ -96,6 +96,12 @@ public class ProductServiceImplTest {
 		productServiceImpl.getProducts(PRODUCT_ID_1, DESIRED_CURRENCY);
 	}
 	
+	@Test(expected=DataNotFoundException.class)
+	public void getProductsWhenDataNotFound() throws Exception{
+		Mockito.when(productDao.getBetween(PRODUCT_ID_1, PRODUCT_ID_1+BULK_GET_LIMIT)).thenReturn(null);
+		productServiceImpl.getProducts(PRODUCT_ID_1, DESIRED_CURRENCY);
+	}
+	
 	@Test(expected=ThirdPartyRequestFailedException.class)
 	public void getProductsWhenCurrencyConverterThrowsException() throws Exception{
 		Mockito.when(currencyConvertor.getPrice(product.getPrice(), product.getProductCurrency(), DESIRED_CURRENCY)).thenThrow(new ThirdPartyRequestFailedException("err..", HttpStatus.INTERNAL_SERVER_ERROR));

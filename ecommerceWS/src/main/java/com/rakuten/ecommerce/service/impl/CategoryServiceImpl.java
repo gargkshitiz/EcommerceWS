@@ -125,4 +125,8 @@ public class CategoryServiceImpl implements CategoryService {
 		return bulkGetResultsLimit;
 	}
 
+	void setBulkGetResultsLimit(int bulkGetLimit) {
+		bulkGetResultsLimit = bulkGetLimit;
+	}
+
 }
