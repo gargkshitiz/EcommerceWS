@@ -60,7 +60,7 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 	
 	@Override
-	public void updateCategory(long categoryId, CategoryRequest categoryRequest) throws DataNotFoundException, InvalidClientRequestException {
+	public boolean updateCategory(long categoryId, CategoryRequest categoryRequest) throws DataNotFoundException, InvalidClientRequestException {
 		logger.info("Updating category with Id: {}", categoryId);
 		Category category = validateExistence(categoryId);
 		long parentCategoryId = categoryRequest.getParentCategoryId();
@@ -73,6 +73,7 @@ public class CategoryServiceImpl implements CategoryService {
 		BeanUtils.copyProperties(categoryRequest, category);
 		category.setLastModifiedAt(new Timestamp(System.currentTimeMillis()));
 		categoryDao.merge(category);
+		return true;
 	}
 
 	private Category validateExistence(long categoryId) throws DataNotFoundException {
@@ -113,11 +114,11 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Transactional
 	@Override
-	public void deleteCategory(long categoryId) throws DataNotFoundException {
+	public boolean deleteCategory(long categoryId) throws DataNotFoundException {
 		logger.info("Deleting category with Id: {}", categoryId);
 		Category category = validateExistence(categoryId);
 		categoryDao.remove(category);
-		productCategoryDao.removeByCategory(categoryId);
+		return productCategoryDao.removeByCategory(categoryId);
 	}
 
 	public long getBulkGetResultsLimit() {

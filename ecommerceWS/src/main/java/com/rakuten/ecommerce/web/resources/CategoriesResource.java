@@ -43,7 +43,7 @@ public class CategoriesResource {
 	@Autowired
 	private CategoryService categoryService;
 	
-	private static final String LOCATION = ApiDocumentationConstants.CATEGORY_API + "/{id}";
+	static final String LOCATION = ApiDocumentationConstants.CATEGORY_API + "/{id}";
 	
 	@ApiOperation(value =  ApiDocumentationConstants.CATEGORIES_POST , httpMethod = ApiDocumentationConstants.POST, notes = ApiDocumentationConstants.CATEGORIES_POST_NOTES)
 	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON, consumes= MediaType.APPLICATION_JSON)
@@ -77,7 +77,7 @@ public class CategoriesResource {
 		}
 		catch (DataNotFoundException e) {
 			logger.error(e.getMessage());
-			return new ResponseEntity<>(noCategories(), e.getHttpStatusCode());
+			return new ResponseEntity<>(noCategories(), noCacheHeaders(), HttpStatus.OK);
 		} 
 		catch (InvalidClientRequestException e) {
 			logger.error(e.getMessage());

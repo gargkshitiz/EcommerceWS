@@ -124,11 +124,11 @@ public class ProductServiceImpl implements ProductService {
 
 	@Transactional
 	@Override
-	public void deleteProduct(long productId) throws DataNotFoundException {
+	public boolean deleteProduct(long productId) throws DataNotFoundException {
 		logger.info("Deleting product with Id: {}", productId);
 		Product product = validateExistence(productId);
 		productDao.remove(product);
-		productCategoryDao.removeByProduct(productId);
+		return productCategoryDao.removeByProduct(productId);
 	}
 
 	private Product validateExistence(long productId) throws DataNotFoundException {
@@ -141,7 +141,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Transactional
 	@Override
-	public void updateProduct(long productId, ProductRequest productRequest) throws DataNotFoundException, InvalidClientRequestException, ThirdPartyRequestFailedException, CurrencyNotSupportedException {
+	public boolean updateProduct(long productId, ProductRequest productRequest) throws DataNotFoundException, InvalidClientRequestException, ThirdPartyRequestFailedException, CurrencyNotSupportedException {
 		logger.info("Updating product with Id: {}", productId);
 		Product product = validateExistence(productId);
 		BeanUtils.copyProperties(productRequest, product);
@@ -155,6 +155,7 @@ public class ProductServiceImpl implements ProductService {
 			productCategoryDao.removeByProduct(productId);
 		}
 		persistProductCategoryMappings(product, categoryIds);
+		return true;
 	}
 	
 	@Transactional

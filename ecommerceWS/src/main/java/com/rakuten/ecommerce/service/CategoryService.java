@@ -15,9 +15,9 @@ public interface CategoryService {
 
 	long createCategory(CategoryRequest categoryRequest);
 
-	void updateCategory(long categoryId, CategoryRequest categoryRequest) throws DataNotFoundException, InvalidClientRequestException;
+	boolean updateCategory(long categoryId, CategoryRequest categoryRequest) throws DataNotFoundException, InvalidClientRequestException;
 
-	void deleteCategory(long categoryId) throws DataNotFoundException;
+	boolean deleteCategory(long categoryId) throws DataNotFoundException;
 	
 	BulkCategoryResponse getCategories(long startingCategoryId)throws DataNotFoundException, InvalidClientRequestException;
 

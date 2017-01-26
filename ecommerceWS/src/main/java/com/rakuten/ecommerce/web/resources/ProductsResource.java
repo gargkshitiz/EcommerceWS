@@ -40,7 +40,7 @@ import io.swagger.annotations.ApiResponses;
 @RequestMapping(ApiDocumentationConstants.PRODUCTS_API)
 public class ProductsResource {
  
-	private static final String LOCATION = ApiDocumentationConstants.PRODUCT_API + "/{id}";
+	static final String LOCATION = ApiDocumentationConstants.PRODUCT_API + "/{id}";
 	
 	private static final Logger logger = LoggerFactory.getLogger(ProductsResource.class);
 
@@ -96,7 +96,7 @@ public class ProductsResource {
 		}
 		catch (DataNotFoundException e) {
 			logger.error(e.getMessage());
-			return new ResponseEntity<>(noProducts(), e.getHttpStatusCode());
+			return new ResponseEntity<>(noProducts(), noCacheHeaders(), HttpStatus.OK);
 		} 
 		catch (InvalidClientRequestException e) {
 			logger.error(e.getMessage());
