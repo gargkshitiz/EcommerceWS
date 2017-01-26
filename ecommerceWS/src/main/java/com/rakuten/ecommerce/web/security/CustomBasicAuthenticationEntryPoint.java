@@ -14,13 +14,16 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationEn
  */ 
 public class CustomBasicAuthenticationEntryPoint extends BasicAuthenticationEntryPoint {
  
-    @Override
+    private static final String BASIC_REALM = "Basic realm=";
+	private static final String WWW_AUTHENTICATE = "WWW-Authenticate";
+
+	@Override
     public void commence(final HttpServletRequest request, 
             final HttpServletResponse response, 
             final AuthenticationException authException) throws IOException, ServletException {
          
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.addHeader("WWW-Authenticate", "Basic realm=" + getRealmName() + "");
+        response.addHeader(WWW_AUTHENTICATE, BASIC_REALM + getRealmName() + "");
          
         PrintWriter writer = response.getWriter();
         writer.println("HTTP Status 401 : " + authException.getMessage());

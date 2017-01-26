@@ -1,71 +1,52 @@
-/*package com.rakuten.ecommerce.web.util;
-
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+package com.rakuten.ecommerce.web.util;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.springframework.http.HttpStatus;
-
-import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
-*//**
+import org.springframework.web.context.request.WebRequest;
+/**
  * @author Kshitiz Garg
- *//*
+ */
 public class ErrorResponseHandlerTest {
 
-	private static final String BAD_REQUEST_MSG = "Bad request";
+	@Captor
+	private ArgumentCaptor<HttpStatus> httpStatusCaptor;
 
+	@Captor
+	private ArgumentCaptor<RuntimeException> runtimeExceptionCaptor;
+	
+	@Captor
+	private ArgumentCaptor<WebRequest> webRequestCaptor;
+	
 	@InjectMocks
+	@Spy
 	private ErrorResponseHandler errorResponseHandler = new ErrorResponseHandler();
 	
 	@Mock
-	private Throwable throwable;
+	private RuntimeException runTimeException;
+	
+	@Mock
+	private WebRequest webRequest;
 	
 	@Before
 	public void setup(){
 		MockitoAnnotations.initMocks(this);
-		throwable = new IllegalArgumentException("err....");
+		runTimeException = new IllegalArgumentException("err....");
 	}
 
 	@Test
 	public void toResponse(){
-		Response response = errorResponseHandler.toResponse(throwable);
-		Assert.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), response.getStatus());
+		errorResponseHandler.toResponse(runTimeException, webRequest);
+		Mockito.verify(errorResponseHandler).callSuper(runtimeExceptionCaptor.capture(), webRequestCaptor.capture(), httpStatusCaptor.capture());
+		Assert.assertEquals(HttpStatus.BAD_REQUEST, httpStatusCaptor.getValue());
 	}
 
-	@Test
-	public void toResponseWhenRequestIsBad(){
-		whenRequestIsBad();
-		Response response = errorResponseHandler.toResponse(throwable);
-		Assert.assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
-	}
-
-	@Test
-	public void toResponseWhenWebApplicationExceptionOccurs() throws Exception{
-		whenWebApplicationExceptionOccurs();
-		Response response = errorResponseHandler.toResponse(throwable);
-		Assert.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), response.getStatus());
-	}
-	
-	@Test
-	public void toResponseWhenWebApplicationExceptionOccursButRecoveryEmailFails() throws Exception{
-		whenWebApplicationExceptionOccurs();
-		Response response = errorResponseHandler.toResponse(throwable);
-		Assert.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), response.getStatus());
-	}
-
-	private ErrorResponseHandlerTest whenWebApplicationExceptionOccurs() {
-		throwable = new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
-		return this;
-	}
-
-	private void whenRequestIsBad() {
-		throwable = new UnrecognizedPropertyException(BAD_REQUEST_MSG, null, null, null, null);
-	}
-	
-}*/
+}

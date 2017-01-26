@@ -22,7 +22,11 @@ public class ErrorResponseHandler extends ResponseEntityExceptionHandler{
 	@ExceptionHandler(JsonProcessingException.class)
 	public ResponseEntity<Object> toResponse(RuntimeException ex, WebRequest request) {
     	logger.error("Could not interpret incoming request", request);
-    	return handleExceptionInternal(ex, "", new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    	return callSuper(ex, request, HttpStatus.BAD_REQUEST);
+	}
+
+	ResponseEntity<Object> callSuper(RuntimeException ex, WebRequest request, HttpStatus httpStatus) {
+		return handleExceptionInternal(ex, "", new HttpHeaders(), httpStatus, request);
 	}
 
 }
