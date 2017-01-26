@@ -186,4 +186,8 @@ public class ProductServiceImpl implements ProductService {
 		return bulkProductResponse;
 	}
 
+	void setBulkGetResultsLimit(long bulkGetResultsLimit) {
+		this.bulkGetResultsLimit = bulkGetResultsLimit;
+	}
+
 }
