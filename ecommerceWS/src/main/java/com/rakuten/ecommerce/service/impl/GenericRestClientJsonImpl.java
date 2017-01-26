@@ -77,18 +77,6 @@ public class GenericRestClientJsonImpl implements GenericRestClientJson {
 	}
 	
 	@Override
-	public ResponseEntity<String> getOnBulkApi(String resourcePath) throws ThirdPartyRequestFailedException {
-		HttpEntity<String> httpEntity = new HttpEntity<>(headers);
-		return call(resourcePath, HttpMethod.GET, httpEntity, true);
-	}
-	
-	@Override
-	public ResponseEntity<String> postOnBulkApi(String resourcePath, String jsonRequestBody) throws ThirdPartyRequestFailedException {
-		HttpEntity<String> httpEntity = new HttpEntity<>(jsonRequestBody, headers);
-		return call(resourcePath, HttpMethod.POST, httpEntity, true);
-	}
-	
-	@Override
 	public ResponseEntity<String> post(String postUrl, String requestBody, String contentType, String charSet) throws ThirdPartyRequestFailedException {
 		HttpHeaders customHeaders = new HttpHeaders();
 		List<Charset> acceptableCharsets = new ArrayList<>();

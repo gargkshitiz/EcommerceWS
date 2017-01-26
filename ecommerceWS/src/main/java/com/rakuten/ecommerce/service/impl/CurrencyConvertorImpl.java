@@ -67,7 +67,7 @@ public class CurrencyConvertorImpl implements CurrencyConvertor {
 
 	private Map<Object, Object> getRates(String fromCurrency, String toCurrency) throws ThirdPartyRequestFailedException, CurrencyNotSupportedException {
 		ResponseEntity<String> responseEntity = restClient.get(fixerBaseUri);
-		Map<Object, Object> rates = (Map<Object, Object>)new Gson().fromJson(responseEntity.getBody(), Map.class).get(GenericRestClientJson.RATES);
+		Map<Object, Object> rates = (Map<Object, Object>)new Gson().fromJson(responseEntity.getBody(), Map.class).get(RATES);
 		checkCurrencySupport(rates, fromCurrency);
 		checkCurrencySupport(rates, toCurrency);
 		return rates;

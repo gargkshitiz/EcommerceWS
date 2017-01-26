@@ -64,7 +64,7 @@ public class CategoryServiceImpl implements CategoryService {
 		logger.info("Updating category with Id: {}", categoryId);
 		Category category = validateExistence(categoryId);
 		long parentCategoryId = categoryRequest.getParentCategoryId();
-		if(categoryId ==  parentCategoryId){
+		if(categoryId ==  parentCategoryId || (parentCategoryId <= 0 && parentCategoryId!= -1)){
 			throw new InvalidClientRequestException("parentCategoryId and categoryId can't be same");
 		}
 		if(parentCategoryId != -1){

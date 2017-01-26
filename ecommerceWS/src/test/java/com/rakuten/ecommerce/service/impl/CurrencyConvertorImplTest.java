@@ -55,7 +55,7 @@ public class CurrencyConvertorImplTest {
 		MockitoAnnotations.initMocks(this);
 		convertorImpl.setFixerBaseUri(FIXER_BASE_URI);
 		fixerResponseJson = readFileFrom(FIXER_RESPONSE_JSON);
-		rates = (Map<Object, Object>)new Gson().fromJson(fixerResponseJson, Map.class).get(GenericRestClientJson.RATES);
+		rates = (Map<Object, Object>)new Gson().fromJson(fixerResponseJson, Map.class).get(CurrencyConvertor.RATES);
 		Mockito.when(responseEntity.getBody()).thenReturn(fixerResponseJson);
 		Mockito.when(genericRestClientJson.get(FIXER_BASE_URI)).thenReturn(responseEntity);
 	}
