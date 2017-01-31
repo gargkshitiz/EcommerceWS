@@ -17,11 +17,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 @ControllerAdvice
 public class ErrorResponseHandler extends ResponseEntityExceptionHandler{
 
-	private static final Logger logger = LoggerFactory.getLogger(ErrorResponseHandler.class);
+	private static final Logger log = LoggerFactory.getLogger(ErrorResponseHandler.class);
 	
 	@ExceptionHandler(JsonProcessingException.class)
 	public ResponseEntity<Object> toResponse(RuntimeException ex, WebRequest request) {
-    	logger.error("Could not interpret incoming request", request);
+    	log.error("Could not interpret incoming request", request);
     	return callSuper(ex, request, HttpStatus.BAD_REQUEST);
 	}
 

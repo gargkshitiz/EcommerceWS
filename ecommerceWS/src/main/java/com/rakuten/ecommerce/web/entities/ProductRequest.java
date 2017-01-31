@@ -40,8 +40,8 @@ public class ProductRequest {
 		this.productCurrency = productCurrency;
 	}
 	
-	private void validate(String productCurrency) {
-		Currency.getInstance(productCurrency);
+	private void validate(String productCurr) {
+		Currency.getInstance(productCurr);
 	}
 	
 	public String getPrice() {
