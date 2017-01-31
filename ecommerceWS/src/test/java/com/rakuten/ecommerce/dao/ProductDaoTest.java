@@ -81,9 +81,9 @@ public class ProductDaoTest {
 	@Test
 	public void getBetween() {
 		Mockito.when(namedQuery.getResultList()).thenReturn(productList);
-		List<Product> productList = productDao.getBetween(START, END);
-		Assert.assertEquals(product1, productList.get(0));
-		Assert.assertEquals(product2, productList.get(1));
+		List<Product> list = productDao.getBetween(START, END);
+		Assert.assertEquals(product1, list.get(0));
+		Assert.assertEquals(product2, list.get(1));
 		Mockito.verify(entityManager, Mockito.only()).createNamedQuery(ProductDao.FETCH_PRODUCTS_BETWEEN_IDS);
 		Mockito.verify(namedQuery, Mockito.times(1)).setParameter(Product.START, START);
 		Mockito.verify(namedQuery, Mockito.times(1)).setParameter(Product.END, END);

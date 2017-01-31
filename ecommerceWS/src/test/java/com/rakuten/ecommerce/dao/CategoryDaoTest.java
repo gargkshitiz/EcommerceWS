@@ -81,9 +81,9 @@ public class CategoryDaoTest {
 	@Test
 	public void getByList() {
 		Mockito.when(namedQuery.getResultList()).thenReturn(categoryList);
-		List<Category> categoryList = categoryDao.getBy(categoryIds);
-		Assert.assertEquals(cat1, categoryList.get(0));
-		Assert.assertEquals(cat2, categoryList.get(1));
+		List<Category> list = categoryDao.getBy(categoryIds);
+		Assert.assertEquals(cat1, list.get(0));
+		Assert.assertEquals(cat2, list.get(1));
 		Mockito.verify(entityManager, Mockito.only()).createNamedQuery(CategoryDao.FETCH_CATEGORIES_BY_IDS);
 		Mockito.verify(namedQuery, Mockito.times(1)).setParameter(Category.CATEGORY_IDS, categoryIds);
 		Mockito.verify(namedQuery, Mockito.times(1)).getResultList();
@@ -101,9 +101,9 @@ public class CategoryDaoTest {
 	@Test
 	public void getBetween() {
 		Mockito.when(namedQuery.getResultList()).thenReturn(categoryList);
-		List<Category> categoryList = categoryDao.getBetween(START, END);
-		Assert.assertEquals(cat1, categoryList.get(0));
-		Assert.assertEquals(cat2, categoryList.get(1));
+		List<Category> list = categoryDao.getBetween(START, END);
+		Assert.assertEquals(cat1, list.get(0));
+		Assert.assertEquals(cat2, list.get(1));
 		Mockito.verify(entityManager, Mockito.only()).createNamedQuery(CategoryDao.FETCH_CATEGORIES_BETWEEN_IDS);
 		Mockito.verify(namedQuery, Mockito.times(1)).setParameter(Category.START, START);
 		Mockito.verify(namedQuery, Mockito.times(1)).setParameter(Category.END, END);
