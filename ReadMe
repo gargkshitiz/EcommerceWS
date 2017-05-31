@@ -1,1 +1,9 @@
 localhost:8090/ecommerceWS/swagger-ui.html
+Can be updated:
+# <springfox-swagger2-version>2.7.0</springfox-swagger2-version>
+# <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
+# <maven-war-plugin.version>3.1.0</maven-war-plugin.version>
+# <jackson.version>2.8.8</jackson.version>
+# <spring.version>4.3.8.RELEASE</spring.version>
+# <spring-retry.version>1.2.0.RELEASE</spring-retry.version>
+# <commons-lang.version>3.5</commons-lang.version>
