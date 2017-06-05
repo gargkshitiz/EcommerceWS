@@ -13,3 +13,7 @@ Tech stack & libraries
 7. Logback with SLF4J conventions
 8. Mockito, PowerMockito and Junit for unit testing
 9. SQL server as the database
+
+Swagger UI url
+================
+localhost:8090/ecommerceWS/swagger-ui.html
